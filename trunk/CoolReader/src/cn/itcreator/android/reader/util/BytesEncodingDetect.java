@@ -20,6 +20,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
+
+/**
+ * 
+ * @author Fluck
+ * @version 1.0
+ */
 public class BytesEncodingDetect extends Encoding {
   // Frequency tables to hold the GB, Big5, and EUC-TW character
   // frequencies
