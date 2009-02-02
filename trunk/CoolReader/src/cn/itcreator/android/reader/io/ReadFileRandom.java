@@ -15,15 +15,20 @@
  */
 package cn.itcreator.android.reader.io;
 
-import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 
+/**
+ * This class for read a file
+ * 
+ * @author SinFrancis
+ * @version 1.0
+ * 
+ */
 public class ReadFileRandom {
 	//private RandomAccessFile randomAccessFile = null;
 	private InputStream dataInputStream = null;

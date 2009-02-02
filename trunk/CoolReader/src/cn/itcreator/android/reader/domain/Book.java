@@ -17,7 +17,7 @@ package cn.itcreator.android.reader.domain;
 
 /**
  * Book of one txt file
- * @author Wang Baoxi
+ * @author Wang XinFeng
  *
  */
 public class Book {

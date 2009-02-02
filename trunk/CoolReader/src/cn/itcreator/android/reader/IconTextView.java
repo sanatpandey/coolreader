@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 /**
  * This class for Icon Text View when browser file
- * @author Wang Baoxi
+ * @author Wang XinFeng
  * @version 1.0
  *
  */

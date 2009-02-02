@@ -20,9 +20,9 @@ package cn.itcreator.android.reader.domain;
  *
  * <p>Description: Cool Reader</p>
  *
- * <p>Copyright: Copyright (c) 2008</p>
+ * <p>Copyright: Copyright (c) 2009</p>
  *
- * <p>Company: www.51gphone.cn</p>
+ * <p>Company: Android OS Community</p>
  *
  * @author Wang Baoxi
  * @version 1.0

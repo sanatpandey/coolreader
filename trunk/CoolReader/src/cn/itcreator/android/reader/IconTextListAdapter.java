@@ -27,7 +27,7 @@ import android.widget.BaseAdapter;
 
 /**
  * a Overwrite list adapter
- * @author Wang Baoxi
+ * @author Wang XinFeng
  *
  */
 public class IconTextListAdapter extends BaseAdapter {

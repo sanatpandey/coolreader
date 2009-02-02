@@ -24,7 +24,7 @@ import java.io.ObjectOutputStream;
 /**
  * object operation util
  * 
- * @author Wang Baoxi
+ * @author Wang XinFeng
  * @version 1.0
  */
 public class ObjectUtil {
