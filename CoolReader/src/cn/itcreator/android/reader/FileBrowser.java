@@ -49,7 +49,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 /**
  * This class for file browser
  * 
- * @author Wang Baoxi
+ * @author Wang XinFeng
  * @version 1.0
  * 
  */

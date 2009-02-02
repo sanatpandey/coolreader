@@ -20,14 +20,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class for read a file
  * 
  * @author SinFrancis
+ * @version 1.0
  * 
  */
 public class ReadFile {

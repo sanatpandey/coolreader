@@ -41,6 +41,7 @@ import android.util.Log;
  * For xml type file tools
  * 
  * @author SinFrancis
+ * @version 1.0
  * 
  */
 public class XMLUtil {

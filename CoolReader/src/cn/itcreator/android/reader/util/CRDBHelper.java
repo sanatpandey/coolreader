@@ -31,7 +31,8 @@ import android.util.Log;
 /**
  * CoolReader Database operator
  * 
- * @author Wang Baoxi
+ * @author Wang XinFeng
+ * @version  1.0
  * 
  */
 public class CRDBHelper extends SQLiteOpenHelper {

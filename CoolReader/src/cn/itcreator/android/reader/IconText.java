@@ -19,7 +19,7 @@ import android.graphics.drawable.Drawable;
 
 /**
  * This class for a item contain icon,text and selectable
- * @author Wang Baoxi
+ * @author Wang XinFeng
  * @version 1.0
  *
  */

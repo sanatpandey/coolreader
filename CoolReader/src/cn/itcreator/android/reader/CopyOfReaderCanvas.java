@@ -60,7 +60,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * @author Administrator
+ * @author Wang XinFeng
+ * @version 1.0
  * 
  */
 public class CopyOfReaderCanvas extends Activity {
