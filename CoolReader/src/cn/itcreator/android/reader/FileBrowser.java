@@ -1,17 +1,16 @@
 /**
- * Copyright (C) 2009 Android OS Community Inc (http://androidos.cc/bbs).
+ * <This class for file browser.>
+ *  Copyright (C) <2009>  <Wang XinFeng,ACC http://androidos.cc/dev>
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  */
 package cn.itcreator.android.reader;
 
@@ -49,25 +48,24 @@ import android.widget.AdapterView.OnItemLongClickListener;
 /**
  * This class for file browser
  * 
- * @author Wang XinFeng
+ * @author Wang Baoxi
  * @version 1.0
  * 
  */
 public class FileBrowser extends ListActivity {
+	private final int REQUEST_CODE = 10;
 	
-	/**database operator*/
+	/** database operator */
 	private CRDBHelper mHelper = null;
-	
+
 	/** exit system menu id */
 	private static final int EXIT = Menu.FIRST;
 
-	//旋屏菜单
-	private static final int CIRC_SCREEN = Menu.FIRST+1;
-	
+	// 旋屏菜单
+	private static final int CIRC_SCREEN = Menu.FIRST + 1;
+
 	/** delete file dialog id */
 	private static final int DELETEFILE = 2;
-	
-
 
 	/** display file mode */
 	private enum DISPLAYMODE {
@@ -79,12 +77,12 @@ public class FileBrowser extends ListActivity {
 	private File mCurrentDirectory = new File("/sdcard/");
 
 	/** Called when the activity is first created. */
-	@Override
+	
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setTheme(android.R.style.Theme_Black);
-		mHelper = new CRDBHelper(this);
+
 		browseToSdCard();
 		this.setSelection(0);
 		this.getListView().setOnItemLongClickListener(onItemLongClickListener);
@@ -94,7 +92,7 @@ public class FileBrowser extends ListActivity {
 	 * This function browses to the sdcard directory of the file-system.
 	 */
 	private void browseToSdCard() {
-		browseToWhere(new File("/sdcard/"));
+		browseToWhere(new File(getString(R.string.sdcard)));
 	}
 
 	/**
@@ -156,8 +154,16 @@ public class FileBrowser extends ListActivity {
 				if (checkEnds(fileName, getResources().getStringArray(
 						R.array.imageEnds))) {
 					currentIcon = getResources().getDrawable(R.drawable.image32);
+					//currentIcon = Drawable.createFromPath(getString(R.string.sdcard)+fileName);
+					Log.d("the image path is:", "/sdcard/"+fileName);
+				}
+				if (checkEnds(fileName, getResources().getStringArray(
+						R.array.htmlEnds))) {
+					currentIcon = getResources().getDrawable(R.drawable.webtext32);
+					//currentIcon = Drawable.createFromPath(getString(R.string.sdcard)+fileName);
 				}
 			}
+			
 			switch (this.mDisplayMode) {
 			case ABSOLUTE:
 				this.mDirectoryList.add(new IconText(currentFile.getPath(),
@@ -180,9 +186,9 @@ public class FileBrowser extends ListActivity {
 		this.setListAdapter(iconTextListAdapter);
 	}
 
-	@Override
+	
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		String tag ="onListItemClick";
+		String tag = "onListItemClick";
 		int selectionRowID = (int) id;
 		String selectedFileString = this.mDirectoryList.get(selectionRowID)
 				.getText();
@@ -201,21 +207,41 @@ public class FileBrowser extends ListActivity {
 						+ this.mDirectoryList.get(selectionRowID).getText());
 				Constant.FILE_PATH = file.getAbsolutePath();
 				if (file.isFile()) {
-					setProgressBarIndeterminateVisibility(false);
-							Book b = new Book();
-							b.setBookPath(Constant.FILE_PATH);
-							Log.d(tag, "book path is :"+b.getBookPath());
-							Constant.BOOK_ID_IN_DATABASE = mHelper.saveBook(b);
-							mHelper.close();
-							Intent i = new Intent();
-							i.setClass(getApplicationContext(), CopyOfReaderCanvas.class);
-							startActivity(i);
-						
 					
-							setProgressBarIndeterminateVisibility(true);
-					this.finish();
-					
-				
+					// is a image
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.imageEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						//startup the picture browser
+						Intent  i = new Intent(this,PictureBrowser.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					}
+					// is a html or htm
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.htmlEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						Intent  i = new Intent(this,HtmlBrowser.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					}
+					// is a txt
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.textEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						mHelper = new CRDBHelper(this);
+						Book b = new Book();
+						b.setBookPath(Constant.FILE_PATH);
+						Log.d(tag, "book path is :" + b.getBookPath());
+						Constant.BOOK_ID_IN_DATABASE = mHelper.saveBook(b);
+						mHelper.close();
+						Intent i = new Intent();
+						i.setClass(getApplicationContext(),
+								CopyOfReaderCanvas.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+						//this.finish();
+					}
 				}
 				break;
 			case ABSOLUTE:
@@ -223,18 +249,44 @@ public class FileBrowser extends ListActivity {
 						.getText());
 				Constant.FILE_PATH = file.getAbsolutePath();
 				if (file.isFile()) {
-					setProgressBarIndeterminateVisibility(false);
-							Book b = new Book();
-							b.setBookPath(Constant.FILE_PATH);
-							Log.d(tag, "book path is :"+b.getBookPath());
-							Constant.BOOK_ID_IN_DATABASE = mHelper.saveBook(b);
-							mHelper.close();
-							Intent i = new Intent();
-							i.setClass(getApplicationContext(), CopyOfReaderCanvas.class);
-							startActivity(i);
-							setProgressBarIndeterminateVisibility(true);
-					this.finish();
+					
+					// is a image
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.imageEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						
+						//startup the picture browser
+						Intent  i = new Intent(this,PictureBrowser.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					}
+					// is a html or htm
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.htmlEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						Intent  i = new Intent(this,HtmlBrowser.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					}
+					// is a txt
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.textEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						mHelper = new CRDBHelper(this);
+						Book b = new Book();
+						b.setBookPath(Constant.FILE_PATH);
+						Log.d(tag, "book path is :" + b.getBookPath());
+						Constant.BOOK_ID_IN_DATABASE = mHelper.saveBook(b);
+						mHelper.close();
+						Intent i = new Intent();
+						i.setClass(getApplicationContext(),
+								CopyOfReaderCanvas.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					//	this.finish();
+					}
 				}
+
 				break;
 			}
 			if (file != null)
@@ -258,7 +310,7 @@ public class FileBrowser extends ListActivity {
 	}
 
 	private OnItemLongClickListener onItemLongClickListener = new OnItemLongClickListener() {
-		@Override
+		
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 				int arg2, long id) {
 			Constant.FILE_PATH = mCurrentDirectory.getAbsolutePath()
@@ -268,19 +320,19 @@ public class FileBrowser extends ListActivity {
 		}
 	};
 
-	@Override
+	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(1, EXIT, 1, R.string.exit).setShortcut('3', 'a').setIcon(
 				R.drawable.close);
-		menu.add(1, CIRC_SCREEN, 0, R.string.circumgyrate).setShortcut('3', 'c').setIcon(
-				R.drawable.circscreen);
+		menu.add(1, CIRC_SCREEN, 0, R.string.circumgyrate)
+				.setShortcut('3', 'c').setIcon(R.drawable.circscreen);
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	@Override
+	
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
-		case DELETEFILE://删除文件对话框
+		case DELETEFILE:// 删除文件对话框
 			return new AlertDialog.Builder(FileBrowser.this).setTitle(
 					getString(R.string.suredelete)).setMessage(
 					getString(R.string.deletefile)).setPositiveButton(
@@ -290,15 +342,15 @@ public class FileBrowser extends ListActivity {
 							setProgressBarIndeterminateVisibility(false);
 							File f = new File(Constant.FILE_PATH);
 							f.delete();
-							//清楚此书籍在数据库中信息
+							// 清楚此书籍在数据库中信息
 							mHelper.deleteBook(Constant.FILE_PATH);
 							setProgressBarIndeterminateVisibility(true);
 							browseToWhere(mCurrentDirectory);
-							
+
 						}
 					}).setNeutralButton(R.string.cancel,
 					new DialogInterface.OnClickListener() {
-						@Override
+						
 						public void onClick(DialogInterface dialog, int which) {
 						}
 					}).create();
@@ -308,7 +360,7 @@ public class FileBrowser extends ListActivity {
 		}
 	}
 
-	@Override
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
@@ -316,8 +368,7 @@ public class FileBrowser extends ListActivity {
 			circumgyrateScreen();
 			return true;
 		case EXIT:// exit system
-			this.mHelper.close();
-			
+
 			this.finish();
 			return true;
 		default:
@@ -325,39 +376,45 @@ public class FileBrowser extends ListActivity {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 旋转屏幕
 	 */
-	private void circumgyrateScreen(){
-		if(getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-			//如果是横屏的话，设置为普通模式
+	private void circumgyrateScreen() {
+		if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			// 如果是横屏的话，设置为普通模式
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-			
-		}else{
+
+		} else {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
 	}
+
 	
-	
-	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			this.browseToWhere(this.mCurrentDirectory);
-    	}
-    	if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-    		this.browseToWhere(this.mCurrentDirectory);
-    	}
-    	if(getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_NO){
-    		//打开键盘
-    		this.browseToWhere(this.mCurrentDirectory);
-    	}
-    	if(getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_YES){
-    		//关闭键盘
-    		this.browseToWhere(this.mCurrentDirectory);
-    	}
-		
+		}
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			this.browseToWhere(this.mCurrentDirectory);
+		}
+		if (getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
+			// 打开键盘
+			this.browseToWhere(this.mCurrentDirectory);
+		}
+		if (getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_YES) {
+			// 关闭键盘
+			this.browseToWhere(this.mCurrentDirectory);
+		}
+	}
+
+	
+	protected void onResume() {
+		super.onResume();
+		String tag = "onResume";
+		Log.d(tag, "start onResume");
+		setProgressBarIndeterminateVisibility(false);
 	}
 	
 	

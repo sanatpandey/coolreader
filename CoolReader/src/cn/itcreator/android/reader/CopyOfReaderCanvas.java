@@ -1,17 +1,16 @@
 /**
- * Copyright (C) 2009 Android OS Community Inc (http://androidos.cc/bbs).
+ * <A activity for display content of txt files.>
+ *   *  Copyright (C) <2009>  <Wang XinFeng,ACC http://androidos.cc/dev>
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  */
 package cn.itcreator.android.reader;
 
@@ -60,18 +59,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
+ * <p>
+ * A activity for display content of txt files.
+ * </p>
  * @author Wang XinFeng
  * @version 1.0
  * 
  */
 public class CopyOfReaderCanvas extends Activity {
 
-	/**用于设置读书背景的请求代码*/
-	private final int REQUEST_CODE_SET_BAGKGROUD=10;
-	
-	/**用于设置字体相关的请求代码*/
+	/** 用于设置读书背景的请求代码 */
+	private final int REQUEST_CODE_SET_BAGKGROUD = 10;
+
+	/** 用于设置字体相关的请求代码 */
 	private final int REQUEST_CODE_SET_FONT = 11;
-	
+
 	/** dialog id */
 	private final int SAVEBOOKMARKSUCCESS = 11;
 	private final int SAVEBOOKMARKFAIL = 12;
@@ -84,8 +86,8 @@ public class CopyOfReaderCanvas extends Activity {
 	private static final int CHANGEFONT = Menu.FIRST;
 	private static final int CHANGEBG = Menu.FIRST + 3;
 	private static final int SAVEBOOKMARK = Menu.FIRST + 4;
-	//旋屏菜单
-	private static final int CIRC_SCREEN = Menu.FIRST+9;
+	// 旋屏菜单
+	private static final int CIRC_SCREEN = Menu.FIRST + 9;
 	private static final int BACK = Menu.FIRST + 6;
 	private static final int EXIT = Menu.FIRST + 7;
 	private static final int ABOUT = Menu.FIRST + 8;
@@ -117,16 +119,15 @@ public class CopyOfReaderCanvas extends Activity {
 	/** 书签集合 */
 	private List<BookMark> mBookMarkList = null;
 
-	/**要操作的书签对象*/
+	/** 要操作的书签对象 */
 	private BookMark mBookMark = null;
-	/**被选择的书签在集合中的位置*/
-	private int bmlocation =0;
+	/** 被选择的书签在集合中的位置 */
+	private int bmlocation = 0;
 	private final Handler mHandler = new Handler();
 
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//设置标题栏带有进度条
+		// 设置标题栏带有进度条
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		String tag = "onCreate";
 		Log.d(tag, "initialize the new Activity");
@@ -135,10 +136,10 @@ public class CopyOfReaderCanvas extends Activity {
 		mScrollView = (ScrollView) findViewById(R.id.scrollView);
 		mTextView = (TextView) findViewById(R.id.textContent);
 		mLinearLayout = (LinearLayout) findViewById(R.id.textLayout);
-		
-		//显示操作正在进行
+
+		// 显示操作正在进行
 		loadData();
-		//取消显示
+		// 取消显示
 	}
 
 	/**
@@ -196,7 +197,7 @@ public class CopyOfReaderCanvas extends Activity {
 	}
 
 	private OnKeyListener mUpOrDown = new View.OnKeyListener() {
-		@Override
+
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
 			if (0 == mTxtReader.getFileLength()) {
 				return false;
@@ -252,7 +253,7 @@ public class CopyOfReaderCanvas extends Activity {
 	};
 
 	private Runnable mScrollToBottom = new Runnable() {
-		@Override
+
 		public void run() {
 			int off = mLinearLayout.getMeasuredHeight()
 					- mScrollView.getHeight();
@@ -263,7 +264,7 @@ public class CopyOfReaderCanvas extends Activity {
 	};
 
 	private OnTouchListener mTouchListener = new View.OnTouchListener() {
-		@Override
+
 		public boolean onTouch(View v, MotionEvent event) {
 			if (0 == mTxtReader.getFileLength()) {
 				return false;
@@ -324,7 +325,6 @@ public class CopyOfReaderCanvas extends Activity {
 		}
 	};
 
-	@Override
 	protected void onStop() {
 		super.onStop();
 		String tag = "onStop";
@@ -337,7 +337,6 @@ public class CopyOfReaderCanvas extends Activity {
 		}
 	}
 
-	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		String tag = "onDestroy";
@@ -352,7 +351,6 @@ public class CopyOfReaderCanvas extends Activity {
 		}
 	}
 
-	@Override
 	protected void onPause() {
 		super.onPause();
 		String tag = "onPause";
@@ -365,22 +363,20 @@ public class CopyOfReaderCanvas extends Activity {
 		}
 	}
 
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(1, CHANGEFONT, 0, R.string.changefont).setShortcut(
-				'3', 'a').setIcon(R.drawable.setfont);
+		menu.add(1, CHANGEFONT, 0, R.string.changefont).setShortcut('3', 'a')
+				.setIcon(R.drawable.setfont);
 		menu.add(1, CHANGEBG, 1, R.string.changebg).setShortcut('3', 'c')
 				.setIcon(R.drawable.setbackgroud);
 		menu.add(2, SAVEBOOKMARK, 2, R.string.savebookmark).setShortcut('3',
 				'd').setIcon(R.drawable.addbookmark);
 		menu.add(2, VIEWBOOKMARK, 3, R.string.viewbookmark).setShortcut('3',
 				'q').setIcon(R.drawable.viewbookmark);
-		//旋转屏幕菜单
-		menu.add(2, CIRC_SCREEN, 3, R.string.circumgyrate).setShortcut('3',
-		'c').setIcon(R.drawable.circscreen);
-		
-		
+		// 旋转屏幕菜单
+		menu.add(2, CIRC_SCREEN, 3, R.string.circumgyrate)
+				.setShortcut('3', 'c').setIcon(R.drawable.circscreen);
+
 		menu.add(3, BACK, 5, R.string.back).setShortcut('3', 'x').setIcon(
 				R.drawable.uponelevel);
 		menu.add(3, EXIT, 6, R.string.exit).setShortcut('3', 'e').setIcon(
@@ -390,33 +386,33 @@ public class CopyOfReaderCanvas extends Activity {
 		return true;
 	}
 
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch (id) {
 		case CHANGEFONT:// change text size
-			//设置字体相关
-			Intent ifs = new Intent(getApplicationContext(), FontSetActivity.class);
+			// 设置字体相关
+			Intent ifs = new Intent(getApplicationContext(),
+					FontSetActivity.class);
 			startActivityForResult(ifs, REQUEST_CODE_SET_FONT);
 			return true;
 		case CHANGEBG:// change background image
 			Intent ix = new Intent(getApplicationContext(), ImageBrowser.class);
-			//startActivity(ix);
+			// startActivity(ix);
 			startActivityForResult(ix, REQUEST_CODE_SET_BAGKGROUD);
 			return true;
 
-		case CIRC_SCREEN://触发了旋屏菜单
-			
+		case CIRC_SCREEN:// 触发了旋屏菜单
+
 			circumgyrateScreen();
 			return true;
-			
+
 		case SAVEBOOKMARK:// save book mark
 			saveBookMarkDialog();
 			return true;
 		case VIEWBOOKMARK:// 浏览书签
 			bookMarkView();
 			return true;
-	
+
 		case EXIT:// exit system
 			this.finish();
 			return true;
@@ -427,7 +423,7 @@ public class CopyOfReaderCanvas extends Activity {
 			startActivity(i);
 			setProgressBarIndeterminateVisibility(true);
 			this.finish();
-			
+
 			return true;
 		case ABOUT:// about this software
 			showDialog(ABOUT);
@@ -437,7 +433,6 @@ public class CopyOfReaderCanvas extends Activity {
 		}
 	}
 
-	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case SAVEBOOKMARKSUCCESS:// save book mark successful
@@ -464,11 +459,11 @@ public class CopyOfReaderCanvas extends Activity {
 		final EditText et = (EditText) d.findViewById(R.id.bmet);
 		et.setText(mTxtReader.getCurrentLineString());
 		final int offset = mTxtReader.getCurrentLineOffset();
-		final Button  sure = (Button ) d.findViewById(R.id.bmsure);
+		final Button sure = (Button) d.findViewById(R.id.bmsure);
 		final Button cancel = (Button) d.findViewById(R.id.bmcancel);
 		// 确定动作
 		sure.setOnClickListener(new View.OnClickListener() {
-			@Override
+
 			public void onClick(View v) {
 				String bmn = et.getText().toString();
 				if (bmn.length() < 1) {
@@ -498,7 +493,7 @@ public class CopyOfReaderCanvas extends Activity {
 
 		// 取消动作
 		cancel.setOnClickListener(new View.OnClickListener() {
-			@Override
+
 			public void onClick(View v) {
 				d.dismiss();
 			}
@@ -506,23 +501,21 @@ public class CopyOfReaderCanvas extends Activity {
 		d.show();
 		System.gc();
 	}
-	
+
 	/**
 	 * 浏览书签的view
 	 */
 	private void bookMarkView() {
-		
-		
+
 		final Dialog d = new Dialog(this);
-		
+
 		d.setContentView(R.layout.bookmarklist);
 		final Button deletebtn = (Button) d.findViewById(R.id.deletebm);
 		final Button gobtn = (Button) d.findViewById(R.id.skipbm);
 		final Button cancelbtn = (Button) d.findViewById(R.id.cancelbm);
 		d.setTitle(getString(R.string.bookmarklist));
 		final ListView listv = (ListView) d.findViewById(R.id.bookmarklistview);
-		mBookMarkList = mHelper
-				.queryAllBookMark(Constant.BOOK_ID_IN_DATABASE);
+		mBookMarkList = mHelper.queryAllBookMark(Constant.BOOK_ID_IN_DATABASE);
 		final ListAdapter listAdapter = new ArrayAdapter<BookMark>(this,
 				android.R.layout.simple_spinner_item, mBookMarkList);
 		listv.setAdapter(listAdapter);
@@ -531,15 +524,13 @@ public class CopyOfReaderCanvas extends Activity {
 		listv
 				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-					@Override
 					public void onItemSelected(AdapterView<?> arg0, View arg1,
 							int arg2, long location) {
 						bmlocation = (int) location;
 						mBookMark = mBookMarkList.get(bmlocation);
-						
+
 					}
 
-					@Override
 					public void onNothingSelected(AdapterView<?> arg0) {
 
 					}
@@ -549,16 +540,16 @@ public class CopyOfReaderCanvas extends Activity {
 		// 删除按钮事件
 		deletebtn.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {//删除书签调用
+			public void onClick(View v) {// 删除书签调用
 				String tag = "delete book mark ";
-				if(mBookMark!=null){
+				if (mBookMark != null) {
 					Log.d(tag, "start delete book mark");
-					boolean b = mHelper.deleteBookMark(mBookMark.getBookMarkId());
-					if(b && mBookMarkList.size()>0){
+					boolean b = mHelper.deleteBookMark(mBookMark
+							.getBookMarkId());
+					if (b && mBookMarkList.size() > 0) {
 						mBookMarkList.remove(bmlocation);
 						listv.setAdapter(listAdapter);
-						mBookMark=null;
+						mBookMark = null;
 						System.gc();
 					}
 				}
@@ -566,9 +557,9 @@ public class CopyOfReaderCanvas extends Activity {
 		});
 		// 跳转按钮事件
 		gobtn.setOnClickListener(new View.OnClickListener() {
-			@Override
+
 			public void onClick(View v) {
-				if(mBookMark!=null){//开始跳转
+				if (mBookMark != null) {// 开始跳转
 					mTxtReader.readBufferByOffset(mBookMark.getCurrentOffset());
 					d.dismiss();
 				}
@@ -578,7 +569,6 @@ public class CopyOfReaderCanvas extends Activity {
 		// 取消按钮事件
 		cancelbtn.setOnClickListener(new View.OnClickListener() {
 
-			@Override
 			public void onClick(View v) {
 				d.dismiss();
 			}
@@ -587,14 +577,12 @@ public class CopyOfReaderCanvas extends Activity {
 
 	}
 
-	
-
 	/**
 	 * 显示浮动比例
 	 */
 	private void showToast() {
 		int x = mTxtReader.getPercent();
-		if (x > mLastPercent ) {
+		if (x > mLastPercent) {
 			mLastPercent = x;
 			mToast = Toast.makeText(CopyOfReaderCanvas.this, mLastPercent
 					+ Constant.PERCENTCHAR, Toast.LENGTH_SHORT);
@@ -614,11 +602,12 @@ public class CopyOfReaderCanvas extends Activity {
 		return new AlertDialog.Builder(this).setPositiveButton(
 				getString(R.string.sure),
 				new DialogInterface.OnClickListener() {
-					@Override
+
 					public void onClick(DialogInterface dialog, int which) {
 					}
-				}).setTitle(getString(R.string.saveresult)).setIcon(R.drawable.success).setMessage(
-				getString(R.string.savesuccess)).create();
+				}).setTitle(getString(R.string.saveresult)).setIcon(
+				R.drawable.success).setMessage(getString(R.string.savesuccess))
+				.create();
 	}
 
 	/**
@@ -630,16 +619,13 @@ public class CopyOfReaderCanvas extends Activity {
 		return new AlertDialog.Builder(this).setPositiveButton(
 				getString(R.string.sure),
 				new DialogInterface.OnClickListener() {
-					@Override
+
 					public void onClick(DialogInterface dialog, int which) {
 					}
-				}).setTitle(getString(R.string.saveresult)).setIcon(R.drawable.fail).setMessage(
-				getString(R.string.savefail)).create();
+				}).setTitle(getString(R.string.saveresult)).setIcon(
+				R.drawable.fail).setMessage(getString(R.string.savefail))
+				.create();
 	}
-
-
-
-	
 
 	/**
 	 * 关于我们
@@ -650,7 +636,7 @@ public class CopyOfReaderCanvas extends Activity {
 		return new AlertDialog.Builder(this).setPositiveButton(
 				getApplicationContext().getString(R.string.sure),
 				new DialogInterface.OnClickListener() {
-					@Override
+
 					public void onClick(DialogInterface dialog, int which) {
 					}
 				}).setTitle(
@@ -663,101 +649,97 @@ public class CopyOfReaderCanvas extends Activity {
 	/**
 	 * 旋转屏幕
 	 */
-	private void circumgyrateScreen(){
-		if(getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-			//如果是横屏的话，设置为普通模式
+	private void circumgyrateScreen() {
+		if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			// 如果是横屏的话，设置为普通模式
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-			
-		}else{
+
+		} else {
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
 	}
-	
-	
+
 	/**
 	 * 当配置配置改变时候触发的方法
 	 */
-	@Override
+
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		
+
 		String tag = "onConfigurationChanged";
-		
-		if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			loadDataWhenCircScreen();
 			Log.d(tag, "configuration chanaged , land screen");
-    	}
-    	if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-    		loadDataWhenCircScreen();
-    		Log.d(tag, "configuration chanaged , common screen");
-    	}
-    	if(getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_NO){
-    		//打开键盘
-    		loadDataWhenCircScreen();
-    	}
-    	if(getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_YES){
-    		//关闭键盘
-    		loadDataWhenCircScreen();
-    	}
-    	
+		}
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			loadDataWhenCircScreen();
+			Log.d(tag, "configuration chanaged , common screen");
+		}
+		if (getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
+			// 打开键盘
+			loadDataWhenCircScreen();
+		}
+		if (getResources().getConfiguration().keyboardHidden == Configuration.KEYBOARDHIDDEN_YES) {
+			// 关闭键盘
+			loadDataWhenCircScreen();
+		}
+
 	}
-	
+
 	/**
 	 * 当旋转屏幕后重新加载数据调用的方法
 	 */
-	private void loadDataWhenCircScreen(){
+	private void loadDataWhenCircScreen() {
 		String tag = "loadDataWhenCircScreen";
-		
-		//重新计算屏幕
+
+		// 重新计算屏幕
 		mScreenHeigth = this.getWindowManager().getDefaultDisplay().getHeight();
 		mScreenWidth = this.getWindowManager().getDefaultDisplay().getWidth();
-		
-		Log.d(tag, "mScreenHeigth : "+mScreenHeigth);
-		Log.d(tag, "mScreenWidth : "+mScreenWidth);
-		//记录读取的位置
-		int offset =  mTxtReader.getCurrentLineOffset();
-		//关闭
+
+		Log.d(tag, "mScreenHeigth : " + mScreenHeigth);
+		Log.d(tag, "mScreenWidth : " + mScreenWidth);
+		// 记录读取的位置
+		int offset = mTxtReader.getCurrentLineOffset();
+		// 关闭
 		mTxtReader.close();
-		
-		//生成新的流
+
+		// 生成新的流
 		mTxtReader = new CopyOfTxtReader(mTextView, this, Constant.FILE_PATH,
 				mScreenWidth, mScreenHeigth, encoding);
 		Log.d(tag, "create new stream for read file");
-		
-		//读取流
-		
-		Log.d(tag, "the offset when read file is :"+offset);
+
+		// 读取流
+
+		Log.d(tag, "the offset when read file is :" + offset);
 		mTxtReader.readBufferByOffset(offset);
-	} 
-	
-	
-	
-	@Override
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		String tag = "onActivityResult";
 		Log.d(tag, "go into the activity result...");
-		if(requestCode==REQUEST_CODE_SET_BAGKGROUD && resultCode ==RESULT_OK){//接收到正确的设置背景的request code
+		if (requestCode == REQUEST_CODE_SET_BAGKGROUD
+				&& resultCode == RESULT_OK) {// 接收到正确的设置背景的request code
 			mScrollView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
 		}
-		
-		if(requestCode == REQUEST_CODE_SET_FONT && resultCode ==RESULT_OK){//设置字体相关
+
+		if (requestCode == REQUEST_CODE_SET_FONT && resultCode == RESULT_OK) {// 设置字体相关
 			TextPaint tp = mTextView.getPaint();
-			if((int)(tp.getTextSize())!=CR.textSize ){//如果当前的字体和设置的字体不相等，重新设置
+			if ((int) (tp.getTextSize()) != CR.textSize) {// 如果当前的字体和设置的字体不相等，重新设置
 				tp.setTextSize(CR.textSize);
 				CR.fontHeight = mTextView.getLineHeight();
 				/** Ascii char width */
-				CR.upperAsciiWidth = (int) tp
-						.measureText(Constant.UPPERASCII);
+				CR.upperAsciiWidth = (int) tp.measureText(Constant.UPPERASCII);
 				/** Chinese char width */
-				CR.ChineseFontWidth = (int) tp.measureText(
-						Constant.CHINESE.toCharArray(), 0, 1);
-				mTxtReader.readBufferByOffset(mTxtReader
-						.getCurrentLineOffset());
+				CR.ChineseFontWidth = (int) tp.measureText(Constant.CHINESE
+						.toCharArray(), 0, 1);
+				mTxtReader
+						.readBufferByOffset(mTxtReader.getCurrentLineOffset());
 			}
-			
-			//设置颜色
-			if(resultCode ==RESULT_OK){
+
+			// 设置颜色
+			if (resultCode == RESULT_OK) {
 				if (Constant.RED.equals(CR.textColor)) {
 					mTextView.setTextColor(Color.RED);
 				}
@@ -780,8 +762,7 @@ public class CopyOfReaderCanvas extends Activity {
 					mTextView.setTextColor(Color.WHITE);
 				}
 			}
-			
+
 		}
 	}
 }
-
