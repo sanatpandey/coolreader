@@ -66,7 +66,7 @@ import android.widget.Toast;
  * @version 1.0
  * 
  */
-public class CopyOfReaderCanvas extends Activity {
+public class TxtActivity extends Activity {
 
 	/** 用于设置读书背景的请求代码 */
 	private final int REQUEST_CODE_SET_BAGKGROUD = 10;
@@ -125,10 +125,33 @@ public class CopyOfReaderCanvas extends Activity {
 	private int bmlocation = 0;
 	private final Handler mHandler = new Handler();
 
+	private String _mFilePath = null;
+	
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// 设置标题栏带有进度条
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
+		
+		Intent intent = getIntent();
+		if(intent == null){
+			finish();
+			return;
+		}
+		Bundle bundle = intent.getExtras();
+		if(bundle==null){
+			finish();
+			return;
+		}
+		_mFilePath = bundle.getString(Constant.FILE_PATH_KEY);
+		if(_mFilePath==null || _mFilePath.equals("")){
+			finish();
+			return;
+		}
+		
+		
+		
 		String tag = "onCreate";
 		Log.d(tag, "initialize the new Activity");
 		setContentView(R.layout.reader);
@@ -157,13 +180,13 @@ public class CopyOfReaderCanvas extends Activity {
 		mHelper = new CRDBHelper(this);
 		// 设置背景
 		if ("".equals(Constant.IMAGE_PATH)) {
-			mScrollView.setBackgroundResource(R.drawable.applegray);
+			mScrollView.setBackgroundResource(R.drawable.defautbg);
 		} else {
 			mScrollView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
-
+			
 		}
-		mReaderBytes = new ReadFileRandom(Constant.FILE_PATH);
+		mReaderBytes = new ReadFileRandom(_mFilePath);
 		byte[] encodings = new byte[400];
 		mReaderBytes.readBytes(encodings);
 		mReaderBytes.close();
@@ -187,10 +210,10 @@ public class CopyOfReaderCanvas extends Activity {
 		Log.d("onCreateDialog CR.FontHeight:", "" + CR.fontHeight);
 		Log.d("onCreateDialog CR.AsciiWidth:", "" + CR.upperAsciiWidth);
 		Log.d("onCreateDialog CR.FontWidth:", "" + CR.ChineseFontWidth);
-		mTxtReader = new CopyOfTxtReader(mTextView, this, Constant.FILE_PATH,
+		mTxtReader = new CopyOfTxtReader(mTextView, this,_mFilePath,
 				mScreenWidth, mScreenHeigth, encoding);
 
-		this.setTitle(Constant.FILE_PATH + "-" + getString(R.string.app_name));
+		this.setTitle(_mFilePath + "-" + getString(R.string.app_name));
 		mScrollView.setOnKeyListener(mUpOrDown);
 		mScrollView.setOnTouchListener(mTouchListener);
 		showToast();
@@ -453,7 +476,7 @@ public class CopyOfReaderCanvas extends Activity {
 	 * @return 保存成功返回true，否则返回false
 	 */
 	private void saveBookMarkDialog() {
-		final Dialog d = new Dialog(CopyOfReaderCanvas.this);
+		final Dialog d = new Dialog(TxtActivity.this);
 		d.setTitle(R.string.inputbmname);
 		d.setContentView(R.layout.bookmark_dialog);
 		final EditText et = (EditText) d.findViewById(R.id.bmet);
@@ -584,7 +607,7 @@ public class CopyOfReaderCanvas extends Activity {
 		int x = mTxtReader.getPercent();
 		if (x > mLastPercent) {
 			mLastPercent = x;
-			mToast = Toast.makeText(CopyOfReaderCanvas.this, mLastPercent
+			mToast = Toast.makeText(TxtActivity.this, mLastPercent
 					+ Constant.PERCENTCHAR, Toast.LENGTH_SHORT);
 			mToast.setGravity(0, 0, 0);
 			mToast.show();
@@ -665,9 +688,7 @@ public class CopyOfReaderCanvas extends Activity {
 
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-
 		String tag = "onConfigurationChanged";
-
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			loadDataWhenCircScreen();
 			Log.d(tag, "configuration chanaged , land screen");
@@ -705,7 +726,7 @@ public class CopyOfReaderCanvas extends Activity {
 		mTxtReader.close();
 
 		// 生成新的流
-		mTxtReader = new CopyOfTxtReader(mTextView, this, Constant.FILE_PATH,
+		mTxtReader = new CopyOfTxtReader(mTextView, this, _mFilePath,
 				mScreenWidth, mScreenHeigth, encoding);
 		Log.d(tag, "create new stream for read file");
 

@@ -32,6 +32,9 @@ public class Constant {
 	public static String FILE_PATH = "";
 	public static String IMAGE_PATH = "";
 	public static int BOOK_ID_IN_DATABASE=0;
+	
+	/**For the key of file path ,intent use it*/
+	public final static String FILE_PATH_KEY = "filePath";
 
 	/** the font size var */
 	public final static int FONT16 = 16;
@@ -39,6 +42,8 @@ public class Constant {
 	public final static int FONT20 = 20;
 	public final static int FONT22 = 22;
 	public final static int FONT24 = 24;
+	
+	
 
 	/** text encode */
 	public final static String GB2312 = "GB2312";
@@ -68,6 +73,7 @@ public class Constant {
 	/** Percent */
 	public final static String PERCENTCHAR = "%";
 
+	
 	/** background */
 	public static String QXLY = "ÇåÐÂÂÌÒ¶";
 	public static String HZHX = "»ðºìÖòÐÄ";

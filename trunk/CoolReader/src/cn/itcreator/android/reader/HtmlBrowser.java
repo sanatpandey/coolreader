@@ -21,6 +21,7 @@ import cn.itcreator.android.reader.io.ReadFileRandom;
 import cn.itcreator.android.reader.paramter.Constant;
 import cn.itcreator.android.reader.util.BytesEncodingDetect;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -33,15 +34,31 @@ import android.webkit.WebView;
  * @since 2009-2-13
  */
 public class HtmlBrowser extends Activity {
+	private String _mFilePath = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.htmlbrowser);
-
+		 Intent intent = getIntent();
+			if(intent == null){
+				finish();
+				return;
+			}
+			Bundle bundle = intent.getExtras();
+			if(bundle==null){
+				finish();
+				return;
+			}
+			_mFilePath = bundle.getString(Constant.FILE_PATH_KEY);
+			if(_mFilePath==null || _mFilePath.equals("")){
+				finish();
+				return;
+			}
+			
 		WebView wv = (WebView) findViewById(R.id.webview);
 
-		ReadFileRandom readFileRandom = new ReadFileRandom(Constant.FILE_PATH);
-		File f = new File(Constant.FILE_PATH);
+		ReadFileRandom readFileRandom = new ReadFileRandom(_mFilePath);
+		File f = new File(_mFilePath);
 		byte[] b = readFileRandom.readBytes(200);
 		readFileRandom.close();
 		readFileRandom.openNewStream();

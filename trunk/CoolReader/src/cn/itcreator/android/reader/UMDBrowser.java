@@ -48,12 +48,27 @@ public class UMDBrowser extends Activity {
 	private ListView catalogLV;
 	private ImageSwitcher switcher;
 	private List<Integer> thumbIds = new ArrayList<Integer>();
-	
+	private String _mFilePath = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_info);
-        
+        Intent intent = getIntent();
+		if(intent == null){
+			finish();
+			return;
+		}
+		Bundle bundle = intent.getExtras();
+		if(bundle==null){
+			finish();
+			return;
+		}
+		_mFilePath = bundle.getString(Constant.FILE_PATH_KEY);
+		if(_mFilePath==null || _mFilePath.equals("")){
+			finish();
+			return;
+		}
+		
         Log.i(TAG, "UMDBrowser start");
         parseUMD();
         
@@ -150,17 +165,18 @@ public class UMDBrowser extends Activity {
     
     private void openText(int index){
     	setProgressBarIndeterminateVisibility(false);
-    	Constant.FILE_PATH = "/sdcard/cr_temp/crbook" + index + ".txt";
-    	System.out.println("file path " + Constant.FILE_PATH);
+    	String txtFilePath = "/sdcard/cr_temp/crbook" + index + ".txt";
+    	System.out.println("file path " + txtFilePath);
     	Intent i = new Intent();
-		i.setClass(getApplicationContext(),	CopyOfReaderCanvas.class);
+    	i.putExtra(Constant.FILE_PATH_KEY, txtFilePath);
+		i.setClass(getApplicationContext(),	TxtActivity.class);
 		startActivity(i);
 		setProgressBarIndeterminateVisibility(true);
     }
     
 	private void parseUMD(){
 		umdFile = new UMDFile();
-		umdFile.read(Constant.FILE_PATH);
+		umdFile.read(_mFilePath);
 		pageNum = umdFile.getContentSize();
 		System.out.println("pageNum " + pageNum);
 		if(UMDFile.UMD_BOOK_TYPE_TEXT == umdFile.bookInfo.type){

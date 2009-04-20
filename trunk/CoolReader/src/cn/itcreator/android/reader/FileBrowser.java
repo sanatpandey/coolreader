@@ -211,48 +211,52 @@ public class FileBrowser extends ListActivity {
 			case RELATIVE:
 				file = new File(this.mCurrentDirectory.getAbsolutePath()
 						+ this.mDirectoryList.get(selectionRowID).getText());
-				Constant.FILE_PATH = file.getAbsolutePath();
+				String filePath = file.getAbsolutePath();
 				if (file.isFile()) {
 					
 					// is a image
-					if (checkEnds(Constant.FILE_PATH, getResources()
+					if (checkEnds(filePath, getResources()
 							.getStringArray(R.array.imageEnds))) {
 						setProgressBarIndeterminateVisibility(false);
 						//startup the picture browser
 						Intent  i = new Intent(this,PictureBrowser.class);
+						i.putExtra(Constant.FILE_PATH_KEY, filePath);
 						startActivity(i);
 						setProgressBarIndeterminateVisibility(true);
 					}
 					// is a html or htm
-					if (checkEnds(Constant.FILE_PATH, getResources()
+					if (checkEnds(filePath, getResources()
 							.getStringArray(R.array.htmlEnds))) {
 						setProgressBarIndeterminateVisibility(false);
 						Intent  i = new Intent(this,HtmlBrowser.class);
+						i.putExtra(Constant.FILE_PATH_KEY, filePath);
 						startActivity(i);
 						setProgressBarIndeterminateVisibility(true);
 					}
 					// is a txt
-					if (checkEnds(Constant.FILE_PATH, getResources()
+					if (checkEnds(filePath ,getResources()
 							.getStringArray(R.array.textEnds))) {
 						setProgressBarIndeterminateVisibility(false);
 						mHelper = new CRDBHelper(this);
 						Book b = new Book();
-						b.setBookPath(Constant.FILE_PATH);
+						b.setBookPath(filePath);
 						Log.d(tag, "book path is :" + b.getBookPath());
 						Constant.BOOK_ID_IN_DATABASE = mHelper.saveBook(b);
 						mHelper.close();
 						Intent i = new Intent();
+						i.putExtra(Constant.FILE_PATH_KEY, filePath);
 						i.setClass(getApplicationContext(),
-								CopyOfReaderCanvas.class);
+								TxtActivity.class);
 						startActivity(i);
 						setProgressBarIndeterminateVisibility(true);
 						//this.finish();
 					}
 					//UMD[start]; is a UMD; by mingkg21
-					if (checkEnds(Constant.FILE_PATH, getResources()
+					if (checkEnds(filePath, getResources()
 							.getStringArray(R.array.umdEnds))) {
 						setProgressBarIndeterminateVisibility(false);
 						Intent i = new Intent();
+						i.putExtra(Constant.FILE_PATH_KEY, filePath);
 						i.setClass(getApplicationContext(),
 								UMDBrowser.class);
 						startActivity(i);
@@ -297,7 +301,7 @@ public class FileBrowser extends ListActivity {
 						mHelper.close();
 						Intent i = new Intent();
 						i.setClass(getApplicationContext(),
-								CopyOfReaderCanvas.class);
+								TxtActivity.class);
 						startActivity(i);
 						setProgressBarIndeterminateVisibility(true);
 					//	this.finish();
