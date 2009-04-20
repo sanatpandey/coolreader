@@ -118,7 +118,7 @@ public class FontSetActivity extends Activity {
 			
 			public void onClick(View v) {
 				Intent mIntent = new Intent(getApplicationContext(),
-						CopyOfReaderCanvas.class);
+						TxtActivity.class);
 				CR.textColor = fontcolorspinner.getSelectedItem().toString();
 				CR.textSize =Integer.parseInt(fontsizespinner.getSelectedItem().toString());
 				setResult(RESULT_OK, mIntent);

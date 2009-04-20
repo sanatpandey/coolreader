@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.util.Log;
+
 /**
  * This class for read a file
  * 
@@ -34,11 +36,13 @@ public class ReadFileRandom {
 	private InputStream dataInputStream = null;
 	private String filePath = null;
 	public ReadFileRandom(String path) {
+		String tag = "ReadFileRandom";
 		this.filePath = path;
 		try {
 		//	randomAccessFile = new RandomAccessFile(filePath,"rw");
 			dataInputStream = new DataInputStream(new FileInputStream(filePath));
 		} catch (FileNotFoundException e) {
+			Log.d(tag, "Exception :"+e.getMessage());
 		}
 	}
 	
@@ -62,6 +66,9 @@ public class ReadFileRandom {
 		byte[] b = new byte[length];
 		try {
 			//randomAccessFile.read(b);
+			if(dataInputStream == null){
+				dataInputStream = new DataInputStream(new FileInputStream(filePath));
+			}
 			dataInputStream.read(b);
 		} catch (IOException e) {
 			e.printStackTrace();

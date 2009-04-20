@@ -47,7 +47,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
  */
 public class ImageBrowser extends ListActivity {
 
-	//ÐýÆÁ²Ëµ¥
 	private static final int CIRC_SCREEN = Menu.FIRST+1;
 	/** exit system menu id */
 	private static final int EXIT = Menu.FIRST;
@@ -184,7 +183,7 @@ public class ImageBrowser extends ListActivity {
 				if (file.isFile()) {
 					// return the image path
 					Intent mIntent = new Intent(getApplicationContext(),
-							CopyOfReaderCanvas.class);
+							TxtActivity.class);
 					Constant.IMAGE_PATH = file.getAbsolutePath();
 					//startActivity(mIntent);
 					setResult(RESULT_OK, mIntent);
@@ -197,7 +196,7 @@ public class ImageBrowser extends ListActivity {
 				if (file.isFile()) {
 					// return the image path
 					Intent mIntent = new Intent(getApplicationContext(),
-							CopyOfReaderCanvas.class);
+							TxtActivity.class);
 					Constant.IMAGE_PATH = file.getAbsolutePath();
 					//startActivity(mIntent);
 					setResult(RESULT_OK, mIntent);
