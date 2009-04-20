@@ -66,6 +66,7 @@
 	<string name="html">text/html</string>
 	<string name="picturebrowser">图片预览 - CoolReader！</string>
 	<string name="htmlbrowser">网页浏览 - CoolReader！</string>
+	<string name="umdbrowser">UMD浏览 - CoolReader！</string>
 
 	<string name="localFile">本地文件</string>
 	<string name="sinaBooks">新浪书库</string>
@@ -84,4 +85,11 @@
 	</string>
 	<string name="dev">正在开发中，即将到来！</string>
 	
+<string name="bookTitle">书名:</string>
+<string name="bookAuthor">作者:</string>
+<string name="bookDate">出版日期:</string>
+<string name="bookGender">类别:</string>
+<string name="bookPublisher">出版商:</string>
+<string name="catalog">目录</string>
+<string name="openRead">打开阅读</string>
 </resources>

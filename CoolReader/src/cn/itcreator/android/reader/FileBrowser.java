@@ -162,6 +162,12 @@ public class FileBrowser extends ListActivity {
 					currentIcon = getResources().getDrawable(R.drawable.webtext32);
 					//currentIcon = Drawable.createFromPath(getString(R.string.sdcard)+fileName);
 				}
+				//UMD[start]; by mingkg21
+				if (checkEnds(fileName, getResources().getStringArray(
+						R.array.umdEnds))) {
+					currentIcon = getResources().getDrawable(R.drawable.umd32);
+				}
+				//UMD[end]
 			}
 			
 			switch (this.mDisplayMode) {
@@ -242,6 +248,17 @@ public class FileBrowser extends ListActivity {
 						setProgressBarIndeterminateVisibility(true);
 						//this.finish();
 					}
+					//UMD[start]; is a UMD; by mingkg21
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.umdEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						Intent i = new Intent();
+						i.setClass(getApplicationContext(),
+								UMDBrowser.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					}
+					//UMD[end]
 				}
 				break;
 			case ABSOLUTE:
@@ -285,6 +302,17 @@ public class FileBrowser extends ListActivity {
 						setProgressBarIndeterminateVisibility(true);
 					//	this.finish();
 					}
+					//UMD[start]; is a UMD; by mingkg21
+					if (checkEnds(Constant.FILE_PATH, getResources()
+							.getStringArray(R.array.umdEnds))) {
+						setProgressBarIndeterminateVisibility(false);
+						Intent i = new Intent();
+						i.setClass(getApplicationContext(),
+								UMDBrowser.class);
+						startActivity(i);
+						setProgressBarIndeterminateVisibility(true);
+					}
+					//UMD[end]
 				}
 
 				break;

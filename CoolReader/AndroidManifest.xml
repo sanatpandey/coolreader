@@ -36,5 +36,7 @@
 		<activity android:name=".HtmlBrowser"
 			android:configChanges="orientation|keyboardHidden|navigation"
 			android:label="@string/htmlbrowser"></activity>
-	</application>
+		<activity android:name="UMDBrowser" android:configChanges="orientation|keyboardHidden|navigation"
+			android:label="@string/htmlbrowser"></activity>
+</application>
 </manifest> 

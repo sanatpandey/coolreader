@@ -45,5 +45,11 @@
         <item>.htm</item>
         <item>.html</item>
 </array>
+<array name="umdEnds">
+        <item>.umd</item>
+</array>
+<array name="zipEnds">
+        <item>.jar</item>
+</array>
 </resources>
      
