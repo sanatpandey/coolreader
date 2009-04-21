@@ -1,3 +1,18 @@
+/**
+ * <This class for resolve UMD file.>
+ *  Copyright (C) <2009>  <mingkg21,ACC http://androidos.cc/dev>
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
 package cn.itcreator.android.reader.util;
 
 import java.io.BufferedWriter;
@@ -238,11 +253,7 @@ public class UMDFile {
 		byte[] bytes = null;
 		InputStream is = null;
 		try{
-//			if(is != null){
-//				is.reset();
-//			}else{
 			is = new DataInputStream(new FileInputStream(bookPath));
-//			}
 			long skipLength= contentArr.get(index).getIndex();
 			is.skip(skipLength);
 			int length = (int) contentArr.get(index).getLength();
@@ -284,14 +295,14 @@ public class UMDFile {
 		}
 	}
 	
-	/** parse the umd file and read the content of umd file
+	/** parse the UMD file and read the content of UMD file
 	 * @param is
 	 */
 	public void read(InputStream is){
 		try {
 			DataInputStream dis = new DataInputStream(is);
 			long header;
-			//check umd format
+			//check UMD format
 			header = readUInt32(dis);
 			if(UMD_FORMAT != header){
 				throw new Exception("invalid file format\n");
@@ -341,21 +352,21 @@ public class UMDFile {
 		int num2;
 		byte[] buffer1;
 		switch(id){
-		case 0x0E:
+		case 0x0E://only picture
 			if(UMD_BOOK_TYPE_PICTURE == bookInfo.type){
 				this.contentArr.add(new Content(currentPoint, length));
 			}
 			readBytes(dis, (int) length);
 			return;
-		case 0x0F:
+		case 0x0F://only text
 			return;
 		case 0x81:
 			readBytes(dis, (int) length);
 			return;
-		case 130:
+		case 130://cover image
 			this.bookInfo.cover = readBytes(dis, (int) length);
 			return;
-		case 0x83:
+		case 0x83://each chapter length
 			int chapOffLen = (int) (length / 4);
 			this.chapOff = new int[chapOffLen];
 			num1 = 0;
@@ -365,6 +376,7 @@ public class UMDFile {
 			}
 			return;
 		case 0x84:
+			//read the content
 			if(this.additionalCheck != check){
 				this.contentArr.add(new Content(currentPoint, length));
 				readBytes(dis, (int) length);
@@ -375,6 +387,7 @@ public class UMDFile {
 			if(null == buffer1){
 				return;
 			}
+			//read the chapter's name
 			while(num2 < buffer1.length){
 				byte num3 = buffer1[num2];
 				byte[] temp = new byte[num3];
@@ -394,38 +407,38 @@ public class UMDFile {
 	
 	private void readSection(short id, byte b, byte length, DataInputStream dis) throws Exception{
 		switch(id){
-		case 1:
+		case 1://type
 			this.bookInfo.type = readByte(dis);
 			this.bookInfo.pgkSeed = readInt16(dis);
 			return;
-		case 2:
+		case 2://title
 			this.bookInfo.title = readString(dis, length);
 			return;
-		case 3:
+		case 3://author
 			this.bookInfo.author = readString(dis, length);
 			return;	
-		case 4:
+		case 4://year
 			this.bookInfo.year = readString(dis, length);
 			return;
-		case 5:
+		case 5://month
 			this.bookInfo.month = readString(dis, length);
 			return;
-		case 6:
+		case 6://day
 			this.bookInfo.day = readString(dis, length);
 			return;
-		case 7:
+		case 7://gender
 			this.bookInfo.gender = readString(dis, length);
 			return;
-		case 8:
+		case 8://publisher
 			this.bookInfo.publisher = readString(dis, length);
 			return;
-		case 9:
+		case 9://vendor
 			this.bookInfo.vendor = readString(dis, length);
 			return;
 		case 10:
 			this.bookInfo.cid = readInt32(dis);
 			return;
-		case 11:
+		case 11://
 			this.contentLength = readInt32(dis);
 			return;
 		case 12:
