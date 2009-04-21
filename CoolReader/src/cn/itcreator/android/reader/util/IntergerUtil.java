@@ -1,3 +1,18 @@
+/**
+ * <This class for process byte[].>
+ *  Copyright (C) <2009>  <mingkg21,ACC http://androidos.cc/dev>
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
 package cn.itcreator.android.reader.util;
 
 import java.math.BigInteger;
@@ -34,14 +49,6 @@ public class IntergerUtil {
 			bytes[i+1] = highBit;
 		}
 	}
-	
-//	public static final byte[] getReverseBytes(byte[] bytes, int offset, int length){
-//		byte[] temp = new byte[length];
-//		for(int i = offset; i < length; ++i){
-//			temp[i - offset] = bytes[i];
-//		}
-//		return getReverseBytes(temp);
-//	}
 	
 	public static final byte[] getReverseBytes(byte[] bytes){
 		int length = bytes.length;
