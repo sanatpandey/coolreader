@@ -45,6 +45,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
@@ -62,6 +63,7 @@ import android.widget.Toast;
  * <p>
  * A activity for display content of txt files.
  * </p>
+ * 
  * @author Wang XinFeng
  * @version 1.0
  * 
@@ -126,32 +128,31 @@ public class TxtActivity extends Activity {
 	private final Handler mHandler = new Handler();
 
 	private String _mFilePath = null;
-	
-	
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// 设置标题栏带有进度条
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		
-		
+
 		Intent intent = getIntent();
-		if(intent == null){
+		if (intent == null) {
 			finish();
 			return;
 		}
 		Bundle bundle = intent.getExtras();
-		if(bundle==null){
+		if (bundle == null) {
 			finish();
 			return;
 		}
 		_mFilePath = bundle.getString(Constant.FILE_PATH_KEY);
-		if(_mFilePath==null || _mFilePath.equals("")){
+		if (_mFilePath == null || _mFilePath.equals("")) {
 			finish();
 			return;
 		}
+
 		
-		
-		
+		setFullScreen();
+
 		String tag = "onCreate";
 		Log.d(tag, "initialize the new Activity");
 		setContentView(R.layout.reader);
@@ -163,6 +164,12 @@ public class TxtActivity extends Activity {
 		// 显示操作正在进行
 		loadData();
 		// 取消显示
+	}
+
+	private void setFullScreen() {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	}
 
 	/**
@@ -184,7 +191,7 @@ public class TxtActivity extends Activity {
 		} else {
 			mScrollView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
-			
+
 		}
 		mReaderBytes = new ReadFileRandom(_mFilePath);
 		byte[] encodings = new byte[400];
@@ -210,7 +217,7 @@ public class TxtActivity extends Activity {
 		Log.d("onCreateDialog CR.FontHeight:", "" + CR.fontHeight);
 		Log.d("onCreateDialog CR.AsciiWidth:", "" + CR.upperAsciiWidth);
 		Log.d("onCreateDialog CR.FontWidth:", "" + CR.ChineseFontWidth);
-		mTxtReader = new CopyOfTxtReader(mTextView, this,_mFilePath,
+		mTxtReader = new CopyOfTxtReader(mTextView, this, _mFilePath,
 				mScreenWidth, mScreenHeigth, encoding);
 
 		this.setTitle(_mFilePath + "-" + getString(R.string.app_name));
@@ -740,7 +747,8 @@ public class TxtActivity extends Activity {
 		String tag = "onActivityResult";
 		Log.d(tag, "go into the activity result...");
 		if (requestCode == REQUEST_CODE_SET_BAGKGROUD
-				&& resultCode == RESULT_OK) {// 接收到正确的设置背景的request code
+				&& resultCode == RESULT_OK) {// 接收到正确的设置背景的request
+												// code
 			mScrollView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
 		}
