@@ -26,6 +26,8 @@ import cn.itcreator.android.reader.io.ReadFile;
 import cn.itcreator.android.reader.io.ReadFileRandom;
 import cn.itcreator.android.reader.paramter.CR;
 import cn.itcreator.android.reader.paramter.Constant;
+import cn.itcreator.android.reader.views.CustomTextView;
+import cn.itcreator.android.reader.views.CustomViewActivity;
 
 import android.content.Context;
 import android.util.Log;
@@ -348,19 +350,17 @@ public class CopyOfTxtReader {
 		// 取得mCurrentLine信息，是否为0，如果为0，说处在显示缓存中的最顶端
 		int tempCurrentLine = mCurrentLine;// 临时保存当前行
 		int futureLine = tempCurrentLine - n;// 未来首行的位置
-		Log.d(tag, "futureLine : "+futureLine);
+		Log.d(tag, "futureLine : " + futureLine);
 		if (futureLine < 0) {// 越界了
 			futureLine = 0;
 		}
-		
-		 Log.d(tag, "mCurrentLine:"+mCurrentLine); 
-		 Log.d(tag,
-		 "futureLine:"+futureLine); 
-		 Log.d(tag, "mBeforeOfDoc:"+mBeforeOfDoc);
-		  Log.d(tag, "mEndOfDoc:"+mEndOfDoc); 
-		  Log.d(tag,
-		 "mCurrentLine:"+mCurrentLine);
-		 
+
+		Log.d(tag, "mCurrentLine:" + mCurrentLine);
+		Log.d(tag, "futureLine:" + futureLine);
+		Log.d(tag, "mBeforeOfDoc:" + mBeforeOfDoc);
+		Log.d(tag, "mEndOfDoc:" + mEndOfDoc);
+		Log.d(tag, "mCurrentLine:" + mCurrentLine);
+
 		// 是否需要加载新的缓存，根据文档是否处于第一个文档判断
 		if (futureLine == 0 && !mBeforeOfDoc) {// 需要加载新缓存
 			// Log.d(tag, "futureLine ==0 && !mBeforeOfDoc");
@@ -369,38 +369,39 @@ public class CopyOfTxtReader {
 			Log.d(tag, "futureLine ==0 && !mBeforeOfDoc");
 			int lastLine = mLinesOfOneScreen - 1;// 屏幕数据最后一行的索引
 			if (lastLine > mMyLines.size()) {// 数据连一个屏幕都不够
-				Log.d(tag, "lastLine  : "+lastLine);
-				Log.d(tag, "mMyLines.size():"+mMyLines.size());
+				Log.d(tag, "lastLine  : " + lastLine);
+				Log.d(tag, "mMyLines.size():" + mMyLines.size());
 				mStartOffset = 0;
 				mDataStartLocation = mMyLines.get(0).beforeLineLength;
 				mEndOffset = mMyLines.get(mMyLines.size() - 1).offset;
 				mDataEndLocation = mMyLines.get(mMyLines.size() - 1).beforeLineLength;
 			} else {
-				mCurrentLine =  mMyLines.size() - mLinesOfOneScreen;
-				if(mCurrentLine<0){
+				mCurrentLine = mMyLines.size() - mLinesOfOneScreen;
+				if (mCurrentLine < 0) {
 					Log.d(tag, "set the mCurrentLine is 0 ....");
-					mCurrentLine=0;
+					mCurrentLine = 0;
 				}
 				mStartOffset = mMyLines.get(mCurrentLine).offset;
 				mDataStartLocation = mMyLines.get(mCurrentLine).beforeLineLength;
 				mEndOffset = mMyLines.get(mMyLines.size() - 1).offset;
 				mDataEndLocation = mMyLines.get(mMyLines.size() - 1).beforeLineLength;
 			}
-			
-			Log.d(tag, "mCurrentLine : "+mCurrentLine);
+
+			Log.d(tag, "mCurrentLine : " + mCurrentLine);
 			Log.d(tag, "mDataStartLocation ： " + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation : " + mDataEndLocation);
-		/*	System.out.println("读取了新的缓冲并显示");
-			System.out.println("mCurrentLine: "+mCurrentLine);
-			System.out.println("lastLine: "+lastLine);
-			System.out.println("mStartOffset ： " + mStartOffset);
-			System.out.println("mDataStartLocation ： " + mDataStartLocation);
-			System.out.println("mDataEndLocation : " + mDataEndLocation);
-			*/
+			/*
+			 * System.out.println("读取了新的缓冲并显示");
+			 * System.out.println("mCurrentLine: "+mCurrentLine);
+			 * System.out.println("lastLine: "+lastLine);
+			 * System.out.println("mStartOffset ： " + mStartOffset);
+			 * System.out.println("mDataStartLocation ： " + mDataStartLocation);
+			 * System.out.println("mDataEndLocation : " + mDataEndLocation);
+			 */
 			setData(mStartOffset, mDataEndLocation);
-			
+
 			return;
-		
+
 		}
 
 		if (futureLine == 0 && mBeforeOfDoc) {
@@ -421,15 +422,15 @@ public class CopyOfTxtReader {
 
 			Log.d(tag, "mDataStartLocation : " + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation : " + mDataEndLocation);
-		//	System.out.println("文档已经到第一个了，并且行号也在第一个");
+			// System.out.println("文档已经到第一个了，并且行号也在第一个");
 			setData(mDataStartLocation, mDataEndLocation);
 			return;
 		}
 
 		if (futureLine > 0) {// 说明向上还能滚屏或者是翻页
 			int lastLine = futureLine + mLinesOfOneScreen;// 最后一行
-			if(lastLine >= mMyLines.size()){//防止取集合数据的时候越界
-				lastLine = mMyLines.size()-1;
+			if (lastLine >= mMyLines.size()) {// 防止取集合数据的时候越界
+				lastLine = mMyLines.size() - 1;
 			}
 			mCurrentLine = futureLine;
 			mStartOffset = mMyLines.get(futureLine).offset;
@@ -440,7 +441,7 @@ public class CopyOfTxtReader {
 
 			Log.d(tag, "mDataStartLocation ： " + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation : " + mDataEndLocation);
-		//	System.out.println("说明向上还能滚屏或者是翻页");
+			// System.out.println("说明向上还能滚屏或者是翻页");
 			setData(mDataStartLocation, mDataEndLocation);
 		}
 
