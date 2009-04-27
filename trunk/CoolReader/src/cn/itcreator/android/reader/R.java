@@ -47,11 +47,11 @@ public final class R {
         public static final int webtext32=0x7f020015;
     }
     public static final class id {
-        public static final int IndexRelativeLayout=0x7f070019;
+        public static final int IndexRelativeLayout=0x7f07001c;
         public static final int LinearLayout01=0x7f07000d;
         public static final int TableLayout01=0x7f070008;
         public static final int TableRow01=0x7f07000f;
-        public static final int TextView01=0x7f07001c;
+        public static final int TextView01=0x7f07001f;
         public static final int bmcancel=0x7f07000c;
         public static final int bmet=0x7f07000a;
         public static final int bmsure=0x7f07000b;
@@ -67,32 +67,33 @@ public final class R {
         public static final int cancelbm=0x7f070012;
         public static final int catalog_item=0x7f070013;
         public static final int deletebm=0x7f070010;
-        public static final int fontcolorspinner=0x7f070015;
-        public static final int fontsizespinner=0x7f070014;
-        public static final int gallery=0x7f07001e;
-        public static final int gotoreader=0x7f070017;
-        public static final int localBooks=0x7f07001a;
-        public static final int scrollView=0x7f07001f;
-        public static final int sinaBooks=0x7f07001b;
+        public static final int fontcolorspinner=0x7f070018;
+        public static final int fontsizespinner=0x7f070017;
+        public static final int gallery=0x7f070021;
+        public static final int gotoreader=0x7f07001a;
+        public static final int localBooks=0x7f07001d;
+        public static final int scrollView=0x7f070014;
+        public static final int sinaBooks=0x7f07001e;
         public static final int skipbm=0x7f070011;
-        public static final int switcher=0x7f07001d;
-        public static final int textContent=0x7f070021;
-        public static final int textLayout=0x7f070020;
+        public static final int switcher=0x7f070020;
+        public static final int textContent=0x7f070016;
+        public static final int textLayout=0x7f070015;
         public static final int tre=0x7f070009;
-        public static final int viewfont=0x7f070016;
-        public static final int webview=0x7f070018;
+        public static final int viewfont=0x7f070019;
+        public static final int webview=0x7f07001b;
     }
     public static final class layout {
         public static final int book_info=0x7f030000;
         public static final int bookmark_dialog=0x7f030001;
         public static final int bookmarklist=0x7f030002;
         public static final int catalog_row=0x7f030003;
-        public static final int file_row=0x7f030004;
-        public static final int fontset=0x7f030005;
-        public static final int htmlbrowser=0x7f030006;
-        public static final int indexactivity=0x7f030007;
-        public static final int picturebrowser=0x7f030008;
-        public static final int reader=0x7f030009;
+        public static final int custom_reader=0x7f030004;
+        public static final int file_row=0x7f030005;
+        public static final int fontset=0x7f030006;
+        public static final int htmlbrowser=0x7f030007;
+        public static final int indexactivity=0x7f030008;
+        public static final int picturebrowser=0x7f030009;
+        public static final int reader=0x7f03000a;
     }
     public static final class string {
         public static final int about=0x7f050025;
