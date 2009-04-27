@@ -164,7 +164,6 @@ public class UMDBrowser extends Activity {
     
     private OnItemClickListener listener = new OnItemClickListener(){
 
-		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int index,
 				long arg3) {
 			// TODO Auto-generated method stub
@@ -217,7 +216,6 @@ public class UMDBrowser extends Activity {
 	
 	private OnItemSelectedListener galleryListener = new OnItemSelectedListener(){
 
-		@Override
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			// TODO Auto-generated method stub
@@ -226,7 +224,6 @@ public class UMDBrowser extends Activity {
 			System.gc();
 		}
 
-		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
 			// TODO Auto-generated method stub
 			
