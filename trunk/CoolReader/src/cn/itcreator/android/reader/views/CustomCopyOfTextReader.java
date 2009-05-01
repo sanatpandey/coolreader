@@ -138,7 +138,8 @@ public class CustomCopyOfTextReader {
 		this.mFileLength = mReadFileRandom.getFileLength();
 
 		if (this.mFileLength == 0) {
-			customViewInTextReader.setTextArray(this.getScreenText(Constant.NODATAINFILE));
+			customViewInTextReader.setTextArray(this
+					.getScreenText(Constant.NODATAINFILE));
 			return;
 		}
 
@@ -467,9 +468,7 @@ public class CustomCopyOfTextReader {
 					mEndOffset = mMyLines.get(i).offset;
 					mDataEndLocation = mMyLines.get(i).beforeLineLength;
 				}
-				Log
-						.d(tag,
-								"futureLine+mLinesOfOneScreen > lastLineIndex !mEndOfDoc ");
+				Log.d(tag, "futureLine+mLinesOfOneScreen > lastLineIndex !mEndOfDoc ");
 				Log.d(tag, "mDataStartLocation is :" + mDataStartLocation);
 				Log.d(tag, "mDataEndLocation is :" + mDataEndLocation);
 
@@ -558,8 +557,8 @@ public class CustomCopyOfTextReader {
 				mScreenData.length);
 		try {
 			Log.d("setData:", new String(mScreenData, this.encoding));
-			customViewInTextReader.setTextArray(getScreenText(new String(mScreenData,
-					this.encoding)));
+			customViewInTextReader.setTextArray(getScreenText(new String(
+					mScreenData, this.encoding)));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -705,10 +704,21 @@ public class CustomCopyOfTextReader {
 	public String[] getScreenText(String str) {
 		int letterNumsPerLine = 20;
 		List<String> list = new ArrayList<String>();
-		for (int i = 0; i < 20; i++) {
+
+		int lines = 20;
+		if (!((str.length() / letterNumsPerLine) > 20)) {
+			lines = (str.length() / letterNumsPerLine);
+		}
+
+		for (int i = 0; i < lines; i++) {
 			int startToken = i * letterNumsPerLine;
 			int endToken = startToken + letterNumsPerLine;
-			String tempStr = str.substring(startToken, endToken);
+			String tempStr = "";
+			if (i == lines - 1) {
+				tempStr = str.substring(startToken);
+			} else {
+				tempStr = str.substring(startToken, endToken);
+			}
 			list.add(tempStr);
 		}
 		String[] resultArray = new String[list.size()];

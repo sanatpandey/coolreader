@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.PaintDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.text.TextPaint;
+
+import android.util.AttributeSet;
 import android.view.View;
 
 /**
@@ -19,17 +19,17 @@ import android.view.View;
  */
 public class CustomTextView extends View {
 
-//	private String text;
+	// private String text;
 	private String[] textArray;
 	private int fontSize = 12;
 	private int fontColor = Color.BLACK;
-	private int lineHeight = 0;
+	private int lineHeight = 16;
 
 	private int bgColor = Color.WHITE;
 
 	private PaintDrawable paintDrawable;
-	
-	private TextPaint customPainter;
+
+	private Paint customPainter;
 
 	private int alignTop = 70;
 	private int alignLeft = 15;
@@ -38,23 +38,40 @@ public class CustomTextView extends View {
 	public CustomTextView(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
-
-		paintDrawable = new PaintDrawable();
-		paintDrawable.getPaint().setColor(this.bgColor);
-		this.customPainter = (TextPaint) paintDrawable.getPaint();
+		initial();
 
 	}
 
+	public CustomTextView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		// TODO Auto-generated constructor stub
+		initial();
+	}
+
+	public CustomTextView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		// TODO Auto-generated constructor stub
+		initial();
+	}
+
+	private void initial() {
+		paintDrawable = new PaintDrawable(Color.WHITE);
+		this.customPainter = paintDrawable.getPaint();
+		this.customPainter.setColor(this.bgColor);
+
+	}
+	
+	
+
 	@Override
 	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
 		// TODO Auto-generated method stub
 		for (int i = 0; i < this.textArray.length; i++) {
-			canvas.drawText(this.textArray[i], this.alignLeft, this.alignTop
-					+ this.textHeight * i, this.customPainter);
-		}
-
+			canvas.drawText(this.textArray[i], this.alignLeft,
+					this.alignTop + this.textHeight * i, this.customPainter);
+		}		
 		paintDrawable.draw(canvas);
-
 	}
 
 	public void setTextColor(int colorIntValue) {
@@ -68,7 +85,7 @@ public class CustomTextView extends View {
 
 	}
 
-	public TextPaint getPaint() {
+	public Paint getPaint() {
 		// TODO Auto-generated method stub
 		return this.customPainter;
 	}
@@ -77,7 +94,7 @@ public class CustomTextView extends View {
 		// TODO Auto-generated method stub
 		this.fontSize = fontSize;
 
-	}	
+	}
 
 	public int getFontSize() {
 		return fontSize;
@@ -95,14 +112,14 @@ public class CustomTextView extends View {
 		this.fontColor = fontColor;
 	}
 
-	
-
 	public String[] getTextArray() {
 		return textArray;
 	}
 
 	public void setTextArray(String[] textArray) {
 		this.textArray = textArray;
+		this.invalidate();
+		this.postInvalidate();
 	}
 
 	public int getBgColor() {
@@ -125,11 +142,11 @@ public class CustomTextView extends View {
 		this.lineHeight = lineHeight;
 	}
 
-	public TextPaint getCustomPainter() {
+	public Paint getCustomPainter() {
 		return customPainter;
 	}
 
-	public void setCustomPainter(TextPaint customPainter) {
+	public void setCustomPainter(Paint customPainter) {
 		this.customPainter = customPainter;
 	}
 

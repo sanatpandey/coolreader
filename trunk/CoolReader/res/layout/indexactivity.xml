@@ -21,13 +21,7 @@
 
 		<Button android:id="@+id/localBooks" android:layout_width="200px"
 			android:gravity="center_horizontal|center_vertical" android:layout_height="wrap_content"
-			android:text="@string/localFile"></Button>
-		<Button android:id="@+id/sinaBooks" android:layout_width="200px"
-			android:layout_height="wrap_content" android:gravity="center_horizontal|center_vertical"
-			android:text="@string/sinaBooks" android:layout_below="@id/localBooks"></Button>
-		<TextView android:id="@+id/TextView01" android:layout_below="@id/LinearLayout01"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="@string/thx" android:autoLink="all"></TextView>
+			android:text="@string/localFile"></Button>		
 	</LinearLayout>
 
 
