@@ -20,7 +20,7 @@
 
 
 
-		<activity android:name="TxtActivity"
+		<activity android:name=".TxtActivity"
 			android:configChanges="orientation|keyboardHidden|navigation"
 			android:label="@string/app_name">
 			<intent-filter>
