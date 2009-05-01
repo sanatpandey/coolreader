@@ -40,22 +40,22 @@ public class IndexActivity extends Activity {
 			}
 		});
 		
-		Button sinaBooks = (Button) findViewById(R.id.sinaBooks);
-		
-		sinaBooks.setOnTouchListener(new View.OnTouchListener(){
-
-			public boolean onTouch(View v, MotionEvent event) {
-				
-				showDialog(DEVING);
-				return true;
-			}
-		});
-		sinaBooks.setOnClickListener(new View.OnClickListener(){
-
-			public void onClick(View v) {
-				showDialog(DEVING);
-			}
-		});
+//		Button sinaBooks = (Button) findViewById(R.id.sinaBooks);
+//		
+//		sinaBooks.setOnTouchListener(new View.OnTouchListener(){
+//
+//			public boolean onTouch(View v, MotionEvent event) {
+//				
+//				showDialog(DEVING);
+//				return true;
+//			}
+//		});
+//		sinaBooks.setOnClickListener(new View.OnClickListener(){
+//
+//			public void onClick(View v) {
+//				showDialog(DEVING);
+//			}
+//		});
 		
 	}
 	

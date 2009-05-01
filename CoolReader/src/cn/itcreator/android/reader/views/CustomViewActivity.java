@@ -22,7 +22,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -147,16 +149,17 @@ public class CustomViewActivity extends Activity{
 		}
 
 		
-		setFullScreen();
+//		setFullScreen();
 
 		String tag = "onCreate";
 		Log.d(tag, "initialize the new Activity");
-		setContentView(R.layout.reader);
+		setContentView(R.layout.custom_reader);
 		/** the phone component initialization */
 		mScrollView = (ScrollView) findViewById(R.id.scrollView);
 		myCustomView = (CustomTextView) findViewById(R.id.textContent);
 		mLinearLayout = (LinearLayout) findViewById(R.id.textLayout);
 
+		
 		// 显示操作正在进行
 		loadData();
 		// 取消显示
@@ -177,7 +180,7 @@ public class CustomViewActivity extends Activity{
 		mScreenWidth = this.getWindowManager().getDefaultDisplay().getWidth();
 
 		/** text size color and background */
-		myCustomView.setTextColor(Color.BLACK);
+//		myCustomView.setTextColor(Color.BLACK);
 		myCustomView.setTextSize(Constant.FONT18);
 
 		mHelper = new CRDBHelper(this);
@@ -187,8 +190,8 @@ public class CustomViewActivity extends Activity{
 		} else {
 			mScrollView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
-
 		}
+		
 		mReaderBytes = new ReadFileRandom(_mFilePath);
 		byte[] encodings = new byte[400];
 		mReaderBytes.readBytes(encodings);
@@ -200,7 +203,7 @@ public class CustomViewActivity extends Activity{
 		/** 检测文件的编码结束 */
 
 		/** load the attribute for font */
-		TextPaint tp = myCustomView.getPaint();
+		Paint tp = myCustomView.getPaint();
 		CR.fontHeight = myCustomView.getLineHeight();
 
 		/** Ascii char width */
@@ -616,7 +619,6 @@ public class CustomViewActivity extends Activity{
 			mToast.show();
 			System.gc();
 		}
-
 	}
 
 	/**
@@ -750,7 +752,7 @@ public class CustomViewActivity extends Activity{
 		}
 
 		if (requestCode == REQUEST_CODE_SET_FONT && resultCode == RESULT_OK) {// 设置字体相关
-			TextPaint tp = myCustomView.getPaint();
+			Paint tp = myCustomView.getPaint();
 			if ((int) (tp.getTextSize()) != CR.textSize) {// 如果当前的字体和设置的字体不相等，重新设置
 				tp.setTextSize(CR.textSize);
 				CR.fontHeight = myCustomView.getLineHeight();
