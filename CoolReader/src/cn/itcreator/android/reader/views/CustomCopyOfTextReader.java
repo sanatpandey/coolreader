@@ -559,6 +559,7 @@ public class CustomCopyOfTextReader {
 			Log.d("setData:", new String(mScreenData, this.encoding));
 			customViewInTextReader.setTextArray(getScreenText(new String(
 					mScreenData, this.encoding)));
+			customViewInTextReader.invalidate();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

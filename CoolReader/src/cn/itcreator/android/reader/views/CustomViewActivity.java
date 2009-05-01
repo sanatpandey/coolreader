@@ -3,18 +3,6 @@ package cn.itcreator.android.reader.views;
 import java.util.Date;
 import java.util.List;
 
-import cn.itcreator.android.reader.FileBrowser;
-import cn.itcreator.android.reader.FontSetActivity;
-import cn.itcreator.android.reader.ImageBrowser;
-import cn.itcreator.android.reader.R;
-import cn.itcreator.android.reader.domain.BookMark;
-import cn.itcreator.android.reader.io.ReadFileRandom;
-import cn.itcreator.android.reader.paramter.CR;
-import cn.itcreator.android.reader.paramter.Constant;
-import cn.itcreator.android.reader.util.BytesEncodingDetect;
-import cn.itcreator.android.reader.util.CRDBHelper;
-import cn.itcreator.android.reader.util.CopyOfTxtReader;
-import cn.itcreator.android.reader.util.DateUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,13 +10,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextPaint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -43,26 +29,31 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
-
+import cn.itcreator.android.reader.FileBrowser;
+import cn.itcreator.android.reader.FontSetActivity;
+import cn.itcreator.android.reader.ImageBrowser;
+import cn.itcreator.android.reader.R;
+import cn.itcreator.android.reader.domain.BookMark;
+import cn.itcreator.android.reader.io.ReadFileRandom;
+import cn.itcreator.android.reader.paramter.CR;
+import cn.itcreator.android.reader.paramter.Constant;
+import cn.itcreator.android.reader.util.BytesEncodingDetect;
+import cn.itcreator.android.reader.util.CRDBHelper;
+import cn.itcreator.android.reader.util.DateUtil;
 
 /**
  * 
- * Copyright mawei.81@gmail.com
- * Blog: http://www.maweis.com
- * @author peter
- * CustomViewActivity is a main activity for a reader 
- * which will be used to enjoy mobile read life
-
- *
+ * Copyright mawei.81@gmail.com Blog: http://www.maweis.com
+ * 
+ * @author peter CustomViewActivity is a main activity for a reader which will
+ *         be used to enjoy mobile read life
+ * 
+ * 
  */
-public class CustomViewActivity extends Activity{
-
+public class CustomViewActivity extends Activity {
 
 	/** 用于设置读书背景的请求代码 */
 	private final int REQUEST_CODE_SET_BAGKGROUD = 10;
@@ -75,14 +66,9 @@ public class CustomViewActivity extends Activity{
 	private final int SAVEBOOKMARKFAIL = 12;
 	private CustomCopyOfTextReader customCopyOfTextReader;
 	private ReadFileRandom mReaderBytes;
-	
-	
-	private ScrollView mScrollView;
-	private CustomTextView myCustomView;	
-	private LinearLayout mLinearLayout;
-	
-	
-	
+
+	private CustomTextView myCustomView;
+
 	private int mScreenWidth, mScreenHeigth;
 	private static final int CHANGEFONT = Menu.FIRST;
 	private static final int CHANGEBG = Menu.FIRST + 3;
@@ -148,19 +134,14 @@ public class CustomViewActivity extends Activity{
 			finish();
 			return;
 		}
-
 		
-//		setFullScreen();
-
+		setFullScreen();
 		String tag = "onCreate";
 		Log.d(tag, "initialize the new Activity");
 		setContentView(R.layout.custom_reader);
 		/** the phone component initialization */
-		mScrollView = (ScrollView) findViewById(R.id.scrollView);
 		myCustomView = (CustomTextView) findViewById(R.id.textContent);
-		mLinearLayout = (LinearLayout) findViewById(R.id.textLayout);
 
-		
 		// 显示操作正在进行
 		loadData();
 		// 取消显示
@@ -181,18 +162,18 @@ public class CustomViewActivity extends Activity{
 		mScreenWidth = this.getWindowManager().getDefaultDisplay().getWidth();
 
 		/** text size color and background */
-//		myCustomView.setTextColor(Color.BLACK);
+		// myCustomView.setTextColor(Color.BLACK);
 		myCustomView.setTextSize(Constant.FONT18);
 
 		mHelper = new CRDBHelper(this);
 		// 设置背景
 		if ("".equals(Constant.IMAGE_PATH)) {
-			mScrollView.setBackgroundResource(R.drawable.defautbg);
+			myCustomView.setBackgroundResource(R.drawable.defautbg);
 		} else {
-			mScrollView.setBackgroundDrawable(Drawable
+			myCustomView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
 		}
-		
+
 		mReaderBytes = new ReadFileRandom(_mFilePath);
 		byte[] encodings = new byte[400];
 		mReaderBytes.readBytes(encodings);
@@ -217,12 +198,12 @@ public class CustomViewActivity extends Activity{
 		Log.d("onCreateDialog CR.FontHeight:", "" + CR.fontHeight);
 		Log.d("onCreateDialog CR.AsciiWidth:", "" + CR.upperAsciiWidth);
 		Log.d("onCreateDialog CR.FontWidth:", "" + CR.ChineseFontWidth);
-		customCopyOfTextReader = new CustomCopyOfTextReader(myCustomView, this, _mFilePath,
-				mScreenWidth, mScreenHeigth, encoding);
+		customCopyOfTextReader = new CustomCopyOfTextReader(myCustomView, this,
+				_mFilePath, mScreenWidth, mScreenHeigth, encoding);
 
 		this.setTitle(_mFilePath + "-" + getString(R.string.app_name));
-		mScrollView.setOnKeyListener(mUpOrDown);
-		mScrollView.setOnTouchListener(mTouchListener);
+		myCustomView.setOnKeyListener(mUpOrDown);
+		myCustomView.setOnTouchListener(mTouchListener);
 		showToast();
 	}
 
@@ -234,7 +215,7 @@ public class CustomViewActivity extends Activity{
 			}
 			/** scroll to down */
 			if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-				mScrollView.scrollTo(0, CR.fontHeight);
+				myCustomView.scrollTo(0, CR.fontHeight);
 				if (null != customCopyOfTextReader)
 					customCopyOfTextReader.displayNextToScreen(1);
 				showToast();
@@ -247,7 +228,7 @@ public class CustomViewActivity extends Activity{
 
 			/** scroll to up */
 			if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-				mScrollView.scrollTo(0, 0);
+				myCustomView.scrollTo(0, 0);
 				if (null != customCopyOfTextReader)
 					customCopyOfTextReader.displayPreToScreen(1);
 				showToast();
@@ -285,10 +266,10 @@ public class CustomViewActivity extends Activity{
 	private Runnable mScrollToBottom = new Runnable() {
 
 		public void run() {
-			int off = mLinearLayout.getMeasuredHeight()
-					- mScrollView.getHeight();
+			int off = myCustomView.getMeasuredHeight()
+					- myCustomView.getHeight();
 			if (off > 0) {
-				mScrollView.scrollTo(0, off);
+				myCustomView.scrollTo(0, off);
 			}
 		}
 	};
@@ -311,8 +292,8 @@ public class CustomViewActivity extends Activity{
 				/** get the distance when move */
 				int upDownDistancey = mCurY - mRawY;
 				if (upDownDistancey < 0) {
-					customCopyOfTextReader.displayNextToScreen(Math.abs(upDownDistancey
-							/ (CR.fontHeight)));
+					customCopyOfTextReader.displayNextToScreen(Math
+							.abs(upDownDistancey / (CR.fontHeight)));
 					showToast();
 					// Toast.makeText(CopyOfReaderCanvas.this,
 					// mTxtReader.getPercent()+Constant.PERCENTCHAR,
@@ -326,7 +307,7 @@ public class CustomViewActivity extends Activity{
 					// Toast.makeText(CopyOfReaderCanvas.this,
 					// mTxtReader.getPercent()+Constant.PERCENTCHAR,
 					// Toast.LENGTH_SHORT).show();
-					mScrollView.scrollTo(0, 0);
+					myCustomView.scrollTo(0, 0);
 				}
 
 				break;
@@ -340,7 +321,7 @@ public class CustomViewActivity extends Activity{
 					// Toast.makeText(CopyOfReaderCanvas.this,
 					// mTxtReader.getPercent()+Constant.PERCENTCHAR,
 					// Toast.LENGTH_SHORT).show();
-					mScrollView.scrollTo(0, 0);
+					myCustomView.scrollTo(0, 0);
 				}
 				if (leftRightDistancey > 50) {
 					customCopyOfTextReader.displayNextToScreen(10);
@@ -590,7 +571,8 @@ public class CustomViewActivity extends Activity{
 
 			public void onClick(View v) {
 				if (mBookMark != null) {// 开始跳转
-					customCopyOfTextReader.readBufferByOffset(mBookMark.getCurrentOffset());
+					customCopyOfTextReader.readBufferByOffset(mBookMark
+							.getCurrentOffset());
 					d.dismiss();
 				}
 			}
@@ -732,8 +714,8 @@ public class CustomViewActivity extends Activity{
 		customCopyOfTextReader.close();
 
 		// 生成新的流
-		customCopyOfTextReader = new CustomCopyOfTextReader(myCustomView, this, _mFilePath,
-				mScreenWidth, mScreenHeigth, encoding);
+		customCopyOfTextReader = new CustomCopyOfTextReader(myCustomView, this,
+				_mFilePath, mScreenWidth, mScreenHeigth, encoding);
 		Log.d(tag, "create new stream for read file");
 
 		// 读取流
@@ -747,8 +729,8 @@ public class CustomViewActivity extends Activity{
 		Log.d(tag, "go into the activity result...");
 		if (requestCode == REQUEST_CODE_SET_BAGKGROUD
 				&& resultCode == RESULT_OK) {// 接收到正确的设置背景的request
-												// code
-			mScrollView.setBackgroundDrawable(Drawable
+			// code
+			myCustomView.setBackgroundDrawable(Drawable
 					.createFromPath(Constant.IMAGE_PATH));
 		}
 
@@ -763,7 +745,8 @@ public class CustomViewActivity extends Activity{
 				CR.ChineseFontWidth = (int) tp.measureText(Constant.CHINESE
 						.toCharArray(), 0, 1);
 				customCopyOfTextReader
-						.readBufferByOffset(customCopyOfTextReader.getCurrentLineOffset());
+						.readBufferByOffset(customCopyOfTextReader
+								.getCurrentLineOffset());
 			}
 
 			// 设置颜色
