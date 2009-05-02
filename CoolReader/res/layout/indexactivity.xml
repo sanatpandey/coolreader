@@ -20,9 +20,14 @@
 		android:orientation="vertical" android:gravity="center_horizontal">
 
 		<Button android:id="@+id/localBooks" android:layout_width="200px"
-			android:gravity="center_horizontal|center_vertical" android:layout_height="wrap_content"
-			android:text="@string/localFile"></Button>		
+			android:gravity="center_horizontal|center_vertical"
+			android:layout_height="wrap_content" android:text="@string/localFile"></Button>
+			
+	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:gravity="center_horizontal" android:text="@string/thx">
+		</TextView>
 	</LinearLayout>
+
 
 
 
