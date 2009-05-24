@@ -1,11 +1,15 @@
 package cn.itcreator.android.reader.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.maweis.ReaderUtils;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.PaintDrawable;
-
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -19,11 +23,11 @@ import android.view.View;
  */
 public class CustomTextView extends View {
 
-	// private String text;
-	private String[] textArray;
-	private int fontSize = 12;
+	private String text;
+
+	private int fontSize = 16;
 	private int fontColor = Color.BLACK;
-	private int lineHeight = 16;
+	private int lineHeight = 20;
 
 	private int bgColor = Color.WHITE;
 
@@ -31,7 +35,7 @@ public class CustomTextView extends View {
 
 	private Paint customPainter;
 
-	private int alignTop = 70;
+	private int alignTop = 30;
 	private int alignLeft = 15;
 	private int textHeight = 20;
 
@@ -60,17 +64,22 @@ public class CustomTextView extends View {
 		this.customPainter.setColor(this.bgColor);
 
 	}
-	
-	
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+
 		// TODO Auto-generated method stub
-		for (int i = 0; i < this.textArray.length; i++) {
-			canvas.drawText(this.textArray[i], this.alignLeft,
-					this.alignTop + this.textHeight * i, this.customPainter);
-		}		
+
+		com.maweis.ReaderUtils rUtils = new ReaderUtils();
+		String[] textArray = rUtils.getScreenText(this.text);
+		for (int i = 0; i < textArray.length; i++) {
+			canvas.drawText(textArray[i], this.alignLeft, this.alignTop
+					+ this.textHeight * i, this.customPainter);
+		}
+
+		canvas.drawLine(10, 440, 310, 440, this.customPainter);
+
 		paintDrawable.draw(canvas);
 	}
 
@@ -112,14 +121,12 @@ public class CustomTextView extends View {
 		this.fontColor = fontColor;
 	}
 
-	public String[] getTextArray() {
-		return textArray;
+	public String getText() {
+		return text;
 	}
 
-	public void setTextArray(String[] textArray) {
-		this.textArray = textArray;
-		this.invalidate();
-		this.postInvalidate();
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public int getBgColor() {
