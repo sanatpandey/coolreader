@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.animation.Animation;
 import cn.itcreator.android.reader.domain.BookMark;
 import cn.itcreator.android.reader.domain.TxtLine;
 import cn.itcreator.android.reader.io.ReadFileRandom;
@@ -18,7 +19,7 @@ public class CustomCopyOfTextReader {
 	private CustomTextView customViewInTextReader = null;
 	/** the context of application */
 	private Context mContext = null;
-	/** Ò»¸öÎÄµµÖÐ´æ·ÅµÄÊý¾Ý´óÐ¡£¬Ò²¾ÍÊÇÒ»´ÎÐÐ¶ÁÈ¡¶à´óµÄÊý¾Ý */
+
 	private int mDataLengthOfOneDoc = 100 * 1024;// 100k
 
 	/** To read the files */
@@ -36,7 +37,7 @@ public class CustomCopyOfTextReader {
 	/** A screen can store data on the number of line */
 	private int mLinesOfOneScreen;
 
-	/** Ëæ»ú¶ÁÈ¡ÎÄ¼þ */
+	/** ï¿½ï¿½ï¿½ï¿½È¡ï¿½Ä¼ï¿½ */
 	private ReadFileRandom mReadFileRandom;
 
 	/** To read the length of the document */
@@ -79,20 +80,20 @@ public class CustomCopyOfTextReader {
 
 	/** Percentage */
 	private int mPercent = 0;
-	/** ´ÓÏÔÊ¾»º´æÖÐ¿½±´Êý¾ÝÐèÒªµÄÆðÊ¼Ë÷Òý */
+	/** ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ */
 	private int mStartOffset = 0;
-	/** ´ÓÏÔÊ¾»º´æÖÐ¿½±´Êý¾ÝÐèÒªµÄ½áÊøË÷Òý */
+	/** ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 	private int mEndOffset = 0;
-	/*** ÆÁÄ»Êý¾ÝÔÚÏÔÊ¾»º´æÊý×éÖÐµÄÆðÊ¼Ë÷Òý */
+	/*** ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ */
 	private int mDataStartLocation = 0;
-	/*** ÆÁÄ»Êý¾ÝÔÚÏÔÊ¾»º´æÊý×éÖÐµÄ½áÊøË÷Òý */
+	/*** ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 	private int mDataEndLocation = 0;
 
 	/**
 	 * Construction methods for CustomCopyOfTextReader
 	 * 
 	 * @param fileName
-	 * @param textView
+	 * @param myCustomView
 	 * @param screenWidth
 	 * @param screenHeigth
 	 */
@@ -134,12 +135,11 @@ public class CustomCopyOfTextReader {
 		objectUtil = new ObjectUtil(this.mMarkFileName);
 		// xmlutil = new XMLUtil(this.mMarkFileName);
 
-		/** È¡µÃÎÄ¼þµÄ³¤¶È */
+		/** È¡ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ */
 		this.mFileLength = mReadFileRandom.getFileLength();
 
 		if (this.mFileLength == 0) {
-			customViewInTextReader.setTextArray(this
-					.getScreenText(Constant.NODATAINFILE));
+			customViewInTextReader.setText(Constant.NODATAINFILE);
 			return;
 		}
 
@@ -148,50 +148,50 @@ public class CustomCopyOfTextReader {
 
 		readNextBuffer();// Read a buffer
 		analysisDisplayBuffer();// Analysis of buffer
-		displayNextToScreen(0);
+		displayNextToScreen(0, null);
 	}
 
 	/**
 	 * Read the next buffer
 	 */
 	public void readNextBuffer() {
-		// ´æ·ÅÐÐÐÅÏ¢µÄ¼¯ºÏ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ä¼ï¿½ï¿½ï¿½
 		/*
 		 * int myLineSize = mMyLines.size(); if(myLineSize !=0){
-		 * //Èç¹ûÎªÁãµÄ»°£¬ÄÇ¾ÍÊÇµÚÒ»´Î¶ÁÈ¡£¬Èç¹û²»ÎªÁã£¬Éú³ÉÐÂµÄ¶ÔÏó£¬È»ºó½øÐÐÌø¹ýÔÙ¶ÁÈ¡ //´ò¿ªÐÂµÄÊäÈëÁ÷
+		 * //ï¿½ï¿½ï¿½Îªï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Çµï¿½Ò»ï¿½Î¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ÂµÄ¶ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½È¡ //ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		 * mReadFileRandom.openNewStream(); TxtLine t =
-		 * mMyLines.get(mCurrentLine); //ÐèÒªÌø¹ýµÄ³¤¶È int skipLength = t.offset -
+		 * mMyLines.get(mCurrentLine); //ï¿½ï¿½Òªï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ int skipLength = t.offset -
 		 * t.lineLength; mReadFileRandom.fastSkip(skipLength); }
 		 */
 		byte[] b = new byte[mDataLengthOfOneDoc];
 		// long currentLocation = mReadFileRandom.getCurrentLocation();
 
-		// ÉèÖÃµ±Ç°ÏÔÊ¾Êý¾ÝµÚÒ»¸ö×Ö·ûÔÚÎÄ¼þÖÐµÄÆ«ÒÆÁ¿
+		// ï¿½ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½Ê¾ï¿½ï¿½Ýµï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 		mCurrentOffset = (int) mStartOffset;
-		// Ìø¹ý×Ö½ÚÊý
+		// ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½
 		mReadFileRandom.openNewStream();
 		mReadFileRandom.fastSkip(mStartOffset);
 
-		// ¶ÁÈ¡µÄÊý¾ÝÒÑ¾­°üº¬ÁËÆÁÄ»Êý¾Ý
-		int actualLength = mReadFileRandom.readBytes(b);// ¶ÁÈ¡Êý¾Ý
+		// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½
+		int actualLength = mReadFileRandom.readBytes(b);// ï¿½ï¿½È¡ï¿½ï¿½ï¿½
 
-		if (mStartOffset == 0) {// ´¦ÔÚµÚÒ»¸öÎÄµµÉÏ
+		if (mStartOffset == 0) {// ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½
 			mBeforeOfDoc = true;
 		} else {
 			mBeforeOfDoc = false;
 		}
-		if (actualLength < mDataLengthOfOneDoc) {// ¶ÁÈ¡µ½×îºóÁË
+		if (actualLength < mDataLengthOfOneDoc) {// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			mEndOfDoc = true;
 		} else {
 			mEndOfDoc = false;
 		}
 
-		if (actualLength == -1 && mScreenData.length == 0) {// ÎÄ¼þÖÐÃ»ÓÐÊý¾Ý£¬ÆÁÄ»ÖÐÒ²Ã»ÓÐÊý¾Ý
-			customViewInTextReader.setTextArray(getScreenText("ÎÄ¼þÖÐÃ»ÓÐÊý¾Ý"));
+		if (actualLength == -1 && mScreenData.length == 0) {// ï¿½Ä¼ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Ò²Ã»ï¿½ï¿½ï¿½ï¿½ï¿½
+			customViewInTextReader.setText("ï¿½Ä¼ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½");
 			return;
 		}
 
-		if (mEndOfDoc) {// Èç¹û¶Áµ½ÁËÎÄ¼þÎ²£¬²»ÐèÒª·ÖÎö»»ÐÐÁËÖ±½ÓÌø³ö¼´¿É
+		if (mEndOfDoc) {// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Î²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			mDisplayBuffer = new byte[actualLength];
 			System.arraycopy(b, 0, mDisplayBuffer, 0, actualLength);
 			b = null;
@@ -199,9 +199,9 @@ public class CustomCopyOfTextReader {
 			return;
 		}
 
-		// ´ÓÏÂÍùÉÏ²éÕÒµÚÒ»´Î³öÏÖ»»ÐÐµÄÎ»ÖÃ£¬²¢ÇÒ·ÖÎªÉÏ²¿ÓÐÓÃÊý¾ÝºÍÏÂ²¿·ÏÆúÊý¾Ý£¬ÉáÆúÏÂ²¿·ÏÆúÊý¾Ý
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï²ï¿½ï¿½Òµï¿½Ò»ï¿½Î³ï¿½ï¿½Ö»ï¿½ï¿½Ðµï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Îªï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýºï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		int readDataLength = actualLength;
-		int nlocation = 0;// »»ÐÐ³öÏÖµÄÎ»ÖÃ
+		int nlocation = 0;// ï¿½ï¿½ï¿½Ð³ï¿½ï¿½Öµï¿½Î»ï¿½ï¿½
 		while (readDataLength > 0) {
 			if ((b[readDataLength - 1] & 0xff) == 10) {
 				nlocation = readDataLength;
@@ -210,15 +210,15 @@ public class CustomCopyOfTextReader {
 			readDataLength--;
 		}
 
-		if (nlocation == 0) {// 100K µÄÊý¾Ý¶¼Ã»ÓÐ»»ÐÐ£¬²»ÄÜ¶ÁÈ¡
+		if (nlocation == 0) {// 100K ï¿½ï¿½ï¿½ï¿½Ý¶ï¿½Ã»ï¿½Ð»ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ü¶ï¿½È¡
 			System.exit(1);
 		}
 
-		/** Éú³ÉÐÂµÄÏÔÊ¾»º´æ */
+		/** ï¿½ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ */
 		int mDisplayBufferLength = nlocation;
 		mDisplayBuffer = new byte[mDisplayBufferLength];
 
-		/** ¸´ÖÆ¶ÁÈ¡Êý¾ÝÊý¾Ý */
+		/** ï¿½ï¿½ï¿½Æ¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 		System.arraycopy(b, 0, mDisplayBuffer, 0, mDisplayBufferLength);
 		b = null;
 		System.gc();
@@ -227,67 +227,67 @@ public class CustomCopyOfTextReader {
 	/** Read the previous buffer */
 	public void readPreBuffer() {
 
-		// ¶ÁÈ¡µ±Ç°ÆÁÄ»Êý¾ÝµÚÒ»ÐÐµÄÆ«ÒÆÁ¿
-		// ÆÁÄ»×îºóÒ»ÐÐµÄ×îºó×Ö·ûÔÚÎÄ¼þÖÐµÄÆ«ÒÆÁ¿
+		// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½Ä»ï¿½ï¿½Ýµï¿½Ò»ï¿½Ðµï¿½Æ«ï¿½ï¿½ï¿½ï¿½
+		// ï¿½ï¿½Ä»ï¿½ï¿½ï¿½Ò»ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 		int x = mCurrentLine + this.mLinesOfOneScreen;
 		int offsetOfLastLineInScreen = 0;
 		int sizeLines = mMyLines.size();
-		if (x > sizeLines) {// Èç¹ûÔ½½çÁË
+		if (x > sizeLines) {// ï¿½ï¿½ï¿½Ô½ï¿½ï¿½ï¿½ï¿½
 			offsetOfLastLineInScreen = mMyLines.get(sizeLines - 1).offset;
 		} else {
 			offsetOfLastLineInScreen = mMyLines.get(x).offset;
 		}
 
-		// µ±Ç°ÐÐµÄÆ«ÒÆÁ¿ÊÇ·ñÔÚÎÒÃÇÒª¶ÁÈ¡µÄÊý¾Ý·¶Î§ÄÚ£¬Èç¹ûÊÇµÄ»°£¬¾Í´ÓÎÄ¼þÍ·¶ÁÈ¡
+		// ï¿½ï¿½Ç°ï¿½Ðµï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ý·ï¿½Î§ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ»ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½Ä¼ï¿½Í·ï¿½ï¿½È¡
 		if (offsetOfLastLineInScreen <= mDataLengthOfOneDoc) {
 			mBeforeOfDoc = true;
 			if (offsetOfLastLineInScreen == mFileLength) {
 				mEndOfDoc = true;
 			}
 			byte[] b = new byte[offsetOfLastLineInScreen];
-			// ´ò¿ªÊäÈëÁ÷
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			mReadFileRandom.openNewStream();
 			int readDataLength = mReadFileRandom.readBytes(b);
 
 			mDisplayBuffer = new byte[readDataLength];
 			System.arraycopy(b, 0, mDisplayBuffer, 0, readDataLength);
-			// ÉèÖÃµ±Ç°µÄmDisplayBufferµÄµÚÒ»¸ö×Ö·ûµÄÆ«ÒÆÁ¿
+			// ï¿½ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½mDisplayBufferï¿½Äµï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 			mCurrentOffset = 0;
 			b = null;
 			System.gc();
 			return;
 		}
-		// ´ÓÉÏÍùÏÂ·ÖÎö³öµÚÒ»¸ö³öÏÖ»»ÐÐµÄÎ»ÖÃ£¬Èç¹û¶ÁÈ¡µ½×î¶¥¶Ë£¬ÄÇÃ´¾Í²»ÓÃ½øÐÐ·ÖÎöÁË£¬²¢ÉèÖÃmBeforeOfDocÎªtrue
-		// Èç¹ûÉÏÃæµÄÊý¾Ý´óÓÚÎÒÃÇ¹æ¶¨µÄ¶ÁÈ¡³¤¶È£¬ÄÇÃ´¾Í´ÓÖÐ¼äÎÒÃÇÐèÒªµÄ³¤¶È£¬²¢ÇÒ½øÐÐ²éÕÒ»»ÐÐ²Ù×÷
-		// ÐèÒªÌø¹ýµÄ³¤¶È
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ðµï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½î¶¥ï¿½Ë£ï¿½ï¿½ï¿½Ã´ï¿½Í²ï¿½ï¿½Ã½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mBeforeOfDocÎªtrue
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹æ¶¨ï¿½Ä¶ï¿½È¡ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Ã´ï¿½Í´ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä³ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½Ò½ï¿½ï¿½Ð²ï¿½ï¿½Ò»ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
+		// ï¿½ï¿½Òªï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½
 		int skipLength = offsetOfLastLineInScreen - mDataLengthOfOneDoc;
 		mReadFileRandom.openNewStream();
-		// ¶¨Î»µ½´Ë´¦
+		// ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ë´ï¿½
 		mReadFileRandom.locate(skipLength);
-		// ÉèÖÃµ±Ç°µÄmDisplayBufferµÄµÚÒ»¸ö×Ö·ûµÄÆ«ÒÆÁ¿
+		// ï¿½ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½mDisplayBufferï¿½Äµï¿½Ò»ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 		mCurrentOffset = skipLength;
 		byte[] b = new byte[mDataLengthOfOneDoc];
 		int readLength = mReadFileRandom.readBytes(b);
-		// ¿Ï¶¨²»´¦ÓÚµÚÒ»¸öµÄÎÄµµ
+		// ï¿½Ï¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
 		mBeforeOfDoc = false;
-		// ÊÇ·ñ´¦ÓÚ×îºóÒ»¸öÎÄµµ
+		// ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Äµï¿½
 		if (readLength < mDataLengthOfOneDoc) {
 			mEndOfDoc = true;
 		}
 
-		// ½Ø¶ÏÊý¾Ý£¬·ÖÎªÉÏ²¿·ÏÆúÊý¾ÝºÍÏÂ²¿ÓÐÓÃÊý¾Ý£¬ÉáÆúÉÏÃæ·ÏÆúµÄÊý¾Ý
-		int nlocation = 0;// »»ÐÐ³öÏÖµÄÎ»ÖÃ
+		// ï¿½Ø¶ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Îªï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýºï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		int nlocation = 0;// ï¿½ï¿½ï¿½Ð³ï¿½ï¿½Öµï¿½Î»ï¿½ï¿½
 		while (nlocation < readLength) {
 			if ((b[nlocation - 1] & 0xff) == 10) {
 				break;
 			}
 			nlocation++;
 		}
-		if (nlocation == readLength) {// 100k µÄÊý¾ÝÃ»ÓÐ ÕÒµ½Ò»¸ö»»ÐÐ£¬Ö±½ÓÍË³ö
+		if (nlocation == readLength) {// 100k ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½Òµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½Ö±ï¿½ï¿½ï¿½Ë³ï¿½
 			System.exit(1);
 		}
 
-		// ½¨Á¢ÏÔÊ¾»º´æÊý¾Ý
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		mDisplayBuffer = new byte[readLength];
 		System.arraycopy(b, 0, mDisplayBuffer, 0, readLength);
 		b = null;
@@ -297,10 +297,10 @@ public class CustomCopyOfTextReader {
 
 	/**
 	 * 
-	 * Ê¹ÓÃÎÄ¼þµÄÆ«ÒÆÁ¿À´¼ÓÔØÊý¾Ý
+	 * Ê¹ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param offset
-	 *            Êý¾ÝÔÚÎÄ¼þÖÐµÄÆ«ÒÆÁ¿
+	 *            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 	 */
 	public void readBufferByOffset(int offset) {
 		String tag = "readBufferByOffset";
@@ -315,7 +315,7 @@ public class CustomCopyOfTextReader {
 		mMyLines.add(t);
 		readNextBuffer();
 		analysisDisplayBuffer();
-		displayNextToScreen(0);
+		displayNextToScreen(0, null);
 	}
 
 	/**
@@ -323,13 +323,13 @@ public class CustomCopyOfTextReader {
 	 * 
 	 * @param n
 	 */
-	public void displayPreToScreen(int n) {
+	private void displayPreToScreen(int n, Animation animation) {
 		String tag = "displayPreToScreen";
-		// È¡µÃmCurrentLineÐÅÏ¢£¬ÊÇ·ñÎª0£¬Èç¹ûÎª0£¬Ëµ´¦ÔÚÏÔÊ¾»º´æÖÐµÄ×î¶¥¶Ë
-		int tempCurrentLine = mCurrentLine;// ÁÙÊ±±£´æµ±Ç°ÐÐ
-		int futureLine = tempCurrentLine - n;// Î´À´Ê×ÐÐµÄÎ»ÖÃ
+		// È¡ï¿½ï¿½mCurrentLineï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Ç·ï¿½Îª0ï¿½ï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½î¶¥ï¿½ï¿½
+		int tempCurrentLine = mCurrentLine;// ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æµ±Ç°ï¿½ï¿½
+		int futureLine = tempCurrentLine - n;// Î´ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Î»ï¿½ï¿½
 		Log.d(tag, "futureLine : " + futureLine);
-		if (futureLine < 0) {// Ô½½çÁË
+		if (futureLine < 0) {// Ô½ï¿½ï¿½ï¿½ï¿½
 			futureLine = 0;
 		}
 
@@ -339,14 +339,14 @@ public class CustomCopyOfTextReader {
 		Log.d(tag, "mEndOfDoc:" + mEndOfDoc);
 		Log.d(tag, "mCurrentLine:" + mCurrentLine);
 
-		// ÊÇ·ñÐèÒª¼ÓÔØÐÂµÄ»º´æ£¬¸ù¾ÝÎÄµµÊÇ·ñ´¦ÓÚµÚÒ»¸öÎÄµµÅÐ¶Ï
-		if (futureLine == 0 && !mBeforeOfDoc) {// ÐèÒª¼ÓÔØÐÂ»º´æ
+		// ï¿½Ç·ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ÂµÄ»ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½Ç·ï¿½ï¿½Úµï¿½Ò»ï¿½ï¿½ï¿½Äµï¿½ï¿½Ð¶ï¿½
+		if (futureLine == 0 && !mBeforeOfDoc) {// ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½
 			// Log.d(tag, "futureLine ==0 && !mBeforeOfDoc");
 			readPreBuffer();
 			analysisDisplayBuffer();
 			Log.d(tag, "futureLine ==0 && !mBeforeOfDoc");
-			int lastLine = mLinesOfOneScreen - 1;// ÆÁÄ»Êý¾Ý×îºóÒ»ÐÐµÄË÷Òý
-			if (lastLine > mMyLines.size()) {// Êý¾ÝÁ¬Ò»¸öÆÁÄ»¶¼²»¹»
+			int lastLine = mLinesOfOneScreen - 1;// ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
+			if (lastLine > mMyLines.size()) {// ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				Log.d(tag, "lastLine  : " + lastLine);
 				Log.d(tag, "mMyLines.size():" + mMyLines.size());
 				mStartOffset = 0;
@@ -366,29 +366,30 @@ public class CustomCopyOfTextReader {
 			}
 
 			Log.d(tag, "mCurrentLine : " + mCurrentLine);
-			Log.d(tag, "mDataStartLocation £º " + mDataStartLocation);
+			Log.d(tag, "mDataStartLocation ï¿½ï¿½ " + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation : " + mDataEndLocation);
 			/*
-			 * System.out.println("¶ÁÈ¡ÁËÐÂµÄ»º³å²¢ÏÔÊ¾");
+			 * System.out.println("ï¿½ï¿½È¡ï¿½ï¿½ï¿½ÂµÄ»ï¿½ï¿½å²¢ï¿½ï¿½Ê¾");
 			 * System.out.println("mCurrentLine: "+mCurrentLine);
 			 * System.out.println("lastLine: "+lastLine);
-			 * System.out.println("mStartOffset £º " + mStartOffset);
-			 * System.out.println("mDataStartLocation £º " + mDataStartLocation);
-			 * System.out.println("mDataEndLocation : " + mDataEndLocation);
+			 * System.out.println("mStartOffset ï¿½ï¿½ " + mStartOffset);
+			 * System.out.println("mDataStartLocation ï¿½ï¿½ " +
+			 * mDataStartLocation); System.out.println("mDataEndLocation : " +
+			 * mDataEndLocation);
 			 */
-			setData(mStartOffset, mDataEndLocation);
+			setData(mStartOffset, mDataEndLocation, animation);
 
 			return;
 
 		}
 
 		if (futureLine == 0 && mBeforeOfDoc) {
-			// ÎÄµµÒÑ¾­µ½µÚÒ»¸öÁË£¬²¢ÇÒÐÐºÅÒ²ÔÚµÚÒ»¸ö
+			// ï¿½Äµï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½Ò²ï¿½Úµï¿½Ò»ï¿½ï¿½
 			mCurrentLine = 0;
 			mStartOffset = 0;
 			mDataStartLocation = 0;
-			int lastLine = mLinesOfOneScreen - 1;// ÆÁÄ»Êý¾Ý×îºóÒ»ÐÐµÄË÷Òý
-			if (lastLine > mMyLines.size()) {// Êý¾ÝÁ¬Ò»¸öÆÁÄ»¶¼²»¹»
+			int lastLine = mLinesOfOneScreen - 1;// ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
+			if (lastLine > mMyLines.size()) {// ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				mEndOffset = mMyLines.get(mMyLines.size() - 1).offset;
 				mDataEndLocation = mMyLines.get(mMyLines.size() - 1).beforeLineLength;
 			} else {
@@ -400,14 +401,14 @@ public class CustomCopyOfTextReader {
 
 			Log.d(tag, "mDataStartLocation : " + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation : " + mDataEndLocation);
-			// System.out.println("ÎÄµµÒÑ¾­µ½µÚÒ»¸öÁË£¬²¢ÇÒÐÐºÅÒ²ÔÚµÚÒ»¸ö");
-			setData(mDataStartLocation, mDataEndLocation);
+			// System.out.println("ï¿½Äµï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðºï¿½Ò²ï¿½Úµï¿½Ò»ï¿½ï¿½");
+			setData(mDataStartLocation, mDataEndLocation, animation);
 			return;
 		}
 
-		if (futureLine > 0) {// ËµÃ÷ÏòÉÏ»¹ÄÜ¹öÆÁ»òÕßÊÇ·­Ò³
-			int lastLine = futureLine + mLinesOfOneScreen;// ×îºóÒ»ÐÐ
-			if (lastLine >= mMyLines.size()) {// ·ÀÖ¹È¡¼¯ºÏÊý¾ÝµÄÊ±ºòÔ½½ç
+		if (futureLine > 0) {// Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ï»ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ò³
+			int lastLine = futureLine + mLinesOfOneScreen;// ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
+			if (lastLine >= mMyLines.size()) {// ï¿½ï¿½Ö¹È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½Ê±ï¿½ï¿½Ô½ï¿½ï¿½
 				lastLine = mMyLines.size() - 1;
 			}
 			mCurrentLine = futureLine;
@@ -417,13 +418,23 @@ public class CustomCopyOfTextReader {
 			mDataEndLocation = mMyLines.get(lastLine).beforeLineLength;
 			Log.d(tag, "futureLine > 0");
 
-			Log.d(tag, "mDataStartLocation £º " + mDataStartLocation);
+			Log.d(tag, "mDataStartLocation ï¿½ï¿½ " + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation : " + mDataEndLocation);
-			// System.out.println("ËµÃ÷ÏòÉÏ»¹ÄÜ¹öÆÁ»òÕßÊÇ·­Ò³");
-			setData(mDataStartLocation, mDataEndLocation);
+			// System.out.println("Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ï»ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ò³");
+			setData(mDataStartLocation, mDataEndLocation, animation);
 		}
 
-		// Èç¹û²»ÐèÒª¼ÓÔØÐÂµÄ»º´æ£¬ÄÇÃ´¾Í´ÓÊý¾Ý»º´æÖÐ¿½±´Êý¾ÝµÄÆÁÄ»»º´æÖÐ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ÂµÄ»ï¿½ï¿½æ£¬ï¿½ï¿½Ã´ï¿½Í´ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+	}
+
+	public void displayScreenbyLineWithAnimation(int lineNumber,
+			Animation animation) {
+		if (lineNumber > 0) {
+			this.displayNextToScreen(lineNumber, animation);
+		} else {
+			this.displayPreToScreen(Math.abs(lineNumber), animation);
+		}
 
 	}
 
@@ -434,27 +445,27 @@ public class CustomCopyOfTextReader {
 	 *            If n is 0, the data line is 0 to mLlinesOfOneScreen, if the n
 	 *            is 1, the data line is 1 to mLlinesOfOneScreen+1, as this
 	 */
-	public void displayNextToScreen(int n) {
+	private void displayNextToScreen(int n, Animation animation) {
 		String tag = "displayNextToScreen";
-		// ÅÐ¶Ï mCurrentLine´¦ÔÚÊ²Ã´Î»ÖÃ£¬ÏòÏÂÏÔÊ¾»á²»»á³¬¹ýmMyLines¼¯ºÏ×ÜÊý
-		int tempCurrentLine = mCurrentLine;// ÁÙÊ±±£´æµ±Ç°ÐÐ
-		int lastLineIndex = mMyLines.size() - 1;// ×îºóÐÐ¶ÔÏóÔÚ¼¯ºÏÖÐµÄË÷Òý
-		int futureLine = tempCurrentLine + n;// Î´À´ÆðÊ¼ÐÐ
+		// ï¿½Ð¶ï¿½ mCurrentLineï¿½ï¿½ï¿½ï¿½Ê²Ã´Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½á²»ï¿½á³¬ï¿½ï¿½mMyLinesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		int tempCurrentLine = mCurrentLine;// ï¿½ï¿½Ê±ï¿½ï¿½ï¿½æµ±Ç°ï¿½ï¿½
+		int lastLineIndex = mMyLines.size() - 1;// ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
+		int futureLine = tempCurrentLine + n;// Î´ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 
-		// ´¦ÀímCurrentLineÔ½³ömMyLines¼¯ºÏ×ÜÊýµÄÇé¿ö
-		// 1¡¢Èç¹ûmCurrentLineÔ½³ömMyLines¼¯ºÏ×ÜÊý£¬²¢ÇÒÎÄµµ´¦ÔÚ×îºóÒ»Ò³£¬ÄÇÃ´ÉèÖÃmCurrentLine²»±ä
-		// 2¡¢Èç¹ûmCurrentLineÔ½³ömMyLines¼¯ºÏ×ÜÊý,²¢ÇÒÎÄµµ²»´¦ÔÚ×îºóÒ»Ò³£¬¶ÁÈ¡ÏÂ¸ö»º´æ
+		// ï¿½ï¿½ï¿½ï¿½mCurrentLineÔ½ï¿½ï¿½mMyLinesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		// 1ï¿½ï¿½ï¿½ï¿½ï¿½mCurrentLineÔ½ï¿½ï¿½mMyLinesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ò³ï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½mCurrentLineï¿½ï¿½ï¿½ï¿½
+		// 2ï¿½ï¿½ï¿½ï¿½ï¿½mCurrentLineÔ½ï¿½ï¿½mMyLinesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ò³ï¿½ï¿½ï¿½ï¿½È¡ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (futureLine + mLinesOfOneScreen > lastLineIndex) {
-			if (!mEndOfDoc) {// ²»ÔÚÎÄµµµÄ×îºó
-				// ÐèÒª¼ÓÔØÎÄµµ
+			if (!mEndOfDoc) {// ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
 				Log.d(tag, "read new buffer when skip...");
 				readNextBuffer();
 				analysisDisplayBuffer();
-				mCurrentLine = n;// ´ÓµÚNÐÐ¿ªÊ¼ÏÔÊ¾
+				mCurrentLine = n;// ï¿½Óµï¿½Nï¿½Ð¿ï¿½Ê¼ï¿½ï¿½Ê¾
 				lastLineIndex = mMyLines.size() - 1;
-				// ÆÁÄ»Êý¾ÝÆðÊ¼Æ«ÒÆÁ¿
+				// ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Æ«ï¿½ï¿½ï¿½ï¿½
 				mStartOffset = mMyLines.get(mCurrentLine - 1).offset;
-				// ÆÁÄ»Êý¾ÝÔÚÏÔÊ¾»º´æÖÐµÄË÷Òý
+				// ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
 				mDataStartLocation = mMyLines.get(mCurrentLine - 1).beforeLineLength;
 				if (lastLineIndex + 1 < mLinesOfOneScreen) {
 					//
@@ -468,14 +479,16 @@ public class CustomCopyOfTextReader {
 					mEndOffset = mMyLines.get(i).offset;
 					mDataEndLocation = mMyLines.get(i).beforeLineLength;
 				}
-				Log.d(tag, "futureLine+mLinesOfOneScreen > lastLineIndex !mEndOfDoc ");
+				Log
+						.d(tag,
+								"futureLine+mLinesOfOneScreen > lastLineIndex !mEndOfDoc ");
 				Log.d(tag, "mDataStartLocation is :" + mDataStartLocation);
 				Log.d(tag, "mDataEndLocation is :" + mDataEndLocation);
 
-				setData(mDataStartLocation, mDataEndLocation);
+				setData(mDataStartLocation, mDataEndLocation, animation);
 				return;
 			}
-			if (mEndOfDoc) {// ´¦ÔÚ×îºóÒ»¸öÎÄµµ
+			if (mEndOfDoc) {// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Äµï¿½
 				if (lastLineIndex <= mLinesOfOneScreen) {
 					if (mCurrentLine == 0) {
 						mStartOffset = mMyLines.get(mCurrentLine).offset;
@@ -489,7 +502,7 @@ public class CustomCopyOfTextReader {
 					Log.d(tag, "mDataStartLocation is :" + mDataStartLocation);
 					Log.d(tag, "mDataEndLocation is :" + mDataEndLocation);
 
-					setData(mDataStartLocation, mDataEndLocation);
+					setData(mDataStartLocation, mDataEndLocation, animation);
 					return;
 				} else {
 					mStartOffset = mMyLines.get(mCurrentLine).offset;
@@ -504,7 +517,7 @@ public class CustomCopyOfTextReader {
 					Log.d(tag, "mDataStartLocation is :" + mDataStartLocation);
 					Log.d(tag, "mDataEndLocation is :" + mDataEndLocation);
 
-					setData(mDataStartLocation, mDataEndLocation);
+					setData(mDataStartLocation, mDataEndLocation, animation);
 					return;
 				}
 			}
@@ -526,26 +539,26 @@ public class CustomCopyOfTextReader {
 			Log.d(tag, "mDataStartLocation is :" + mDataStartLocation);
 			Log.d(tag, "mDataEndLocation is :" + mDataEndLocation);
 
-			setData(mDataStartLocation, mDataEndLocation);
+			setData(mDataStartLocation, mDataEndLocation, animation);
 			return;
 		}
 
-		// ´ÓmMyLines¼¯ºÏÖÐÈ¡µÃÆðÊ¼ÐÐ¶ÔÏóºÍ½áÎ²ÐÐ¶ÔÏó
-		// Í¨¹ýÆðÊ¼ÐÐ¶ÔÏóºÍ½áÎ²ÐÐ¶ÔÏóÖÐµÄoffsetÈ¡µÃÊý¾ÝÔÚmDisplayBufferµÄÎ»ÖÃ
+		// ï¿½ï¿½mMyLinesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Ð¶ï¿½ï¿½ï¿½Í½ï¿½Î²ï¿½Ð¶ï¿½ï¿½ï¿½
+		// Í¨ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Ð¶ï¿½ï¿½ï¿½Í½ï¿½Î²ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ðµï¿½offsetÈ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mDisplayBufferï¿½ï¿½Î»ï¿½ï¿½
 
-		// ¿½±´Êý¾Ýµ½mScreenDataÊý×éÖÐ
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýµï¿½mScreenDataï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	}
 
 	/**
-	 * ÉèÖÃTextViewÖÐµÄÄÚÈÝ
+	 * ï¿½ï¿½ï¿½ï¿½TextViewï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param start
-	 *            ÆðÊ¼offset
+	 *            ï¿½ï¿½Ê¼offset
 	 * @param end
-	 *            ½áÊø offset
+	 *            ï¿½ï¿½ï¿½ï¿½ offset
 	 */
-	private void setData(int start, int end) {
+	private void setData(int start, int end, Animation animation) {
 		String tag = "setData";
 		Log.d(tag, "start index is :" + start);
 		Log.d(tag, "end index is :" + end);
@@ -557,8 +570,33 @@ public class CustomCopyOfTextReader {
 				mScreenData.length);
 		try {
 			Log.d("setData:", new String(mScreenData, this.encoding));
-			customViewInTextReader.setTextArray(getScreenText(new String(
-					mScreenData, this.encoding)));
+
+			customViewInTextReader.setText(new String(mScreenData,
+					this.encoding));
+			if (animation != null) {
+				customViewInTextReader.startAnimation(animation);
+			}
+			customViewInTextReader.invalidate();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void setData(int start, int end) {
+		String tag = "setData";
+		Log.d(tag, "start index is :" + start);
+		Log.d(tag, "end index is :" + end);
+		mScreenData = new byte[end - start];
+		mCurrentOffset = mStartOffset;
+		mPercent = (int) (((double) end / (double) mFileLength) * 100);
+
+		System.arraycopy(mDisplayBuffer, start, mScreenData, 0,
+				mScreenData.length);
+		try {
+
+			Log.d("setData:", new String(mScreenData, this.encoding));
+			customViewInTextReader.setText(new String(mScreenData,
+					this.encoding));
 			customViewInTextReader.invalidate();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -611,7 +649,7 @@ public class CustomCopyOfTextReader {
 			} else {// Ascii
 				int aw = CR.upperAsciiWidth;
 
-				if (!(b >= 65 && b <= 90)) {// ²»ÊÇ´óÐ´×ÖÄ¸
+				if (!(b >= 65 && b <= 90)) {// ï¿½ï¿½ï¿½Ç´ï¿½Ð´ï¿½ï¿½Ä¸
 					aw = CR.lowerAsciiWidth;
 				}
 				if (width + aw > mViewWidth) {
@@ -641,7 +679,7 @@ public class CustomCopyOfTextReader {
 	}
 
 	/**
-	 * ÅÐ¶ÏÊÇ²»ÊÇµ½ÁËÎÄµµµÄ×îºóÒ»Ò³
+	 * ï¿½Ð¶ï¿½ï¿½Ç²ï¿½ï¿½Çµï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ò³
 	 * 
 	 * @return
 	 */
@@ -667,7 +705,7 @@ public class CustomCopyOfTextReader {
 	}
 
 	/**
-	 * ·µ»Øµ±Ç°ÆÁÄ»µÚÒ»ÐÐÔÚÎÄ¼þµÄÆ«ÒÆÁ¿
+	 * ï¿½ï¿½ï¿½Øµï¿½Ç°ï¿½ï¿½Ä»ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @return
 	 */
@@ -676,7 +714,7 @@ public class CustomCopyOfTextReader {
 	}
 
 	/**
-	 * È¡µÃµ±Ç°ÆÁÄ»µÚÒ»ÐÐµÄÊý¾Ý
+	 * È¡ï¿½Ãµï¿½Ç°ï¿½ï¿½Ä»ï¿½ï¿½Ò»ï¿½Ðµï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @return
 	 */
@@ -700,31 +738,6 @@ public class CustomCopyOfTextReader {
 		}
 		System.gc();
 		return s;
-	}
-
-	public String[] getScreenText(String str) {
-		int letterNumsPerLine = 20;
-		List<String> list = new ArrayList<String>();
-
-		int lines = 20;
-		if (!((str.length() / letterNumsPerLine) > 20)) {
-			lines = (str.length() / letterNumsPerLine);
-		}
-
-		for (int i = 0; i < lines; i++) {
-			int startToken = i * letterNumsPerLine;
-			int endToken = startToken + letterNumsPerLine;
-			String tempStr = "";
-			if (i == lines - 1) {
-				tempStr = str.substring(startToken);
-			} else {
-				tempStr = str.substring(startToken, endToken);
-			}
-			list.add(tempStr);
-		}
-		String[] resultArray = new String[list.size()];
-		list.toArray(resultArray);
-		return resultArray;
 	}
 
 }
